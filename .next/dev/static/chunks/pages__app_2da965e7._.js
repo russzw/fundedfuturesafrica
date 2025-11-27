@@ -9,8 +9,8 @@
   "static/chunks/node_modules_react_e3593a73._.js",
   "static/chunks/node_modules_react-dom_cjs_react-dom_development_2b5e0eb3.js",
   "static/chunks/node_modules_react-dom_8a8085df._.js",
-  "static/chunks/node_modules_1b0ba8b9._.js",
-  "static/chunks/[root-of-the-server]__e9fc9a06._.js",
+  "static/chunks/node_modules_c4b97a68._.js",
+  "static/chunks/[root-of-the-server]__e1d7e437._.js",
   "static/chunks/globals_7b75659e.css"
 ],
     source: "entry"
