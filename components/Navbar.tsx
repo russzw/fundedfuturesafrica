@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Menu, X, GraduationCap } from 'lucide-react';
 import { NavItem } from '../types';
 
@@ -15,6 +16,7 @@ export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const router = useRouter();
 
   // Handle scroll effect for "disappear thingy"
   useEffect(() => {
@@ -43,46 +45,44 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out transform
-        ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        ${lastScrollY > 0 ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200/50' : 'bg-white/95 backdrop-blur-sm border-b border-slate-200'}
-      `}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out transform${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      }${
+        lastScrollY > 0 ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200/50' : 'bg-white/95 backdrop-blur-sm border-b border-slate-200'
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <NavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={closeMenu}>
+            <Link href="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={closeMenu}>
               <div className="bg-brand-600 text-white p-1.5 rounded-lg group-hover:bg-brand-700 transition-colors">
                 <GraduationCap size={24} />
               </div>
               <span className="font-bold text-xl tracking-tight text-slate-900">
-                Funded<span className="text-brand-600">Futures</span>
+                Funded Futures<span className="text-brand-600"> Africa</span>
               </span>
-            </NavLink>
+            </Link>
           </div>
           
           {/* Desktop Menu */}
           <div className="hidden md:flex md:items-center md:space-x-8">
-            {NAV_ITEMS.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${
-                    isActive 
-                      ? 'text-brand-600' 
-                      : 'text-slate-600 hover:text-brand-600'
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    {item.label}
-                    <span className={`absolute bottom-0 left-0 h-0.5 bg-brand-600 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-                  </>
-                )}
-              </NavLink>
-            ))}
+            {NAV_ITEMS.map((item) => {
+                const isActive = router.pathname === item.path;
+                return (
+                    <Link
+                        key={item.path}
+                        href={item.path}
+                        className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${
+                            isActive 
+                            ? 'text-brand-600' 
+                            : 'text-slate-600 hover:text-brand-600'
+                        }`}
+                    >
+                        {item.label}
+                        <span className={`absolute bottom-0 left-0 h-0.5 bg-brand-600 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+                    </Link>
+                );
+            })}
             <a 
               href="mailto:info@fundedfuturesafrica.com"
               className="ml-4 px-5 py-2.5 bg-brand-600 text-white rounded-full text-sm font-semibold hover:bg-brand-700 hover:shadow-lg active:scale-95 transition-all duration-200 ease-out"
@@ -111,22 +111,23 @@ export const Navbar: React.FC = () => {
         }`}
       >
         <div className="px-4 pt-2 pb-6 space-y-2">
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={closeMenu}
-              className={({ isActive }) =>
-                `block px-4 py-3 rounded-lg text-base font-medium transition-all ${
-                  isActive
-                    ? 'text-brand-700 bg-brand-50/80'
-                    : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50/50'
-                }`
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const isActive = router.pathname === item.path;
+            return (
+                <Link
+                    key={item.path}
+                    href={item.path}
+                    onClick={closeMenu}
+                    className={`block px-4 py-3 rounded-lg text-base font-medium transition-all ${
+                        isActive
+                        ? 'text-brand-700 bg-brand-50/80'
+                        : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50/50'
+                    }`}
+                >
+                    {item.label}
+                </Link>
+            );
+            })}
            <a 
             href="mailto:info@fundedfuturesafrica.com"
             className="block w-full text-center mt-6 px-4 py-3 bg-brand-600 text-white rounded-lg text-base font-medium hover:bg-brand-700 shadow-md active:scale-[0.98] transition-all"
