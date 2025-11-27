@@ -1,28 +1,31 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Search, Loader2, Filter, ArrowLeft, ArrowRight } from 'lucide-react';
-import { getScholarships } from '../../services/firebase';
+import { useState, useEffect, useMemo } from 'react';
+import { getScholarships, isFirebaseInitialized } from '../../services/firebase';
 import { Scholarship } from '../../types';
 import { ScholarshipCard } from '../../components/ScholarshipCard';
+import { Search, Filter, X, Loader2, HardDrive, Database } from 'lucide-react';
 
-const ITEMS_PER_PAGE = 10;
+const DEGREE_OPTIONS = ["High School", "Diploma", "Bachelors", "Masters", "PhD", "Post-Doc", "Fellowship", "Vocational", "Research", "Internship", "Bootcamp", "Other"];
 
-const ScholarshipsPage: React.FC = () => {
-  const [allScholarships, setAllScholarships] = useState<Scholarship[]>([]);
+const ScholarshipsPage = () => {
+  const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [loading, setLoading] = useState(true);
+  
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterDegree, setFilterDegree] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [degreeFilter, setDegreeFilter] = useState<string[]>([]);
+  const [sortOrder, setSortOrder] = useState('deadline_asc');
+
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const data = await getScholarships();
-        // Sort by deadline, with future deadlines first
-        const sortedData = data.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
-        setAllScholarships(sortedData);
+        setScholarships(data);
+      } catch (error) {
+        console.error("Error fetching scholarships:", error);
       } finally {
         setLoading(false);
       }
@@ -30,122 +33,210 @@ const ScholarshipsPage: React.FC = () => {
     fetchData();
   }, []);
 
-  const filteredScholarships = allScholarships.filter(item => {
-    const matchesSearch = 
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.provider.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDegree = filterDegree === 'All' || item.degree === filterDegree;
-    return matchesSearch && matchesDegree;
-  });
-
-  // Pagination logic
-  const totalPages = Math.ceil(filteredScholarships.length / ITEMS_PER_PAGE);
-  const paginatedScholarships = filteredScholarships.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo(0, 0);
+  const handleDegreeFilterChange = (degree: string) => {
+    setDegreeFilter(prev => 
+      prev.includes(degree) 
+        ? prev.filter(d => d !== degree) 
+        : [...prev, degree]
+    );
   };
 
-  const degreeTypes = ['All', 'High School', 'Diploma', 'Bachelors', 'Masters', 'PhD', 'Post-Doc', 'Fellowship', 'Vocational', 'Research', 'Internship', 'Bootcamp', 'Other'];
+  const filteredAndSortedScholarships = useMemo(() => {
+    let result = scholarships;
+
+    // Filtering
+    if (searchTerm) {
+      result = result.filter(s => 
+        s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.provider.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (degreeFilter.length > 0) {
+      result = result.filter(s => degreeFilter.includes(s.degree));
+    }
+
+    // Sorting
+    result.sort((a, b) => {
+      if (sortOrder === 'deadline_asc') {
+        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+      }
+      if (sortOrder === 'deadline_desc') {
+        return new Date(b.deadline).getTime() - new Date(a.deadline).getTime();
+      }
+       if (sortOrder === 'funding_asc') {
+        const fundingA = parseFloat(a.fundingAmount.replace(/[^\d.-]/g, '')) || 0;
+        const fundingB = parseFloat(b.fundingAmount.replace(/[^\d.-]/g, '')) || 0;
+        return fundingA - fundingB;
+    }
+    if (sortOrder === 'funding_desc') {
+        const fundingA = parseFloat(a.fundingAmount.replace(/[^\d.-]/g, '')) || 0;
+        const fundingB = parseFloat(b.fundingAmount.replace(/[^\d.-]/g, '')) || 0;
+        return fundingB - fundingA;
+    }
+      return 0;
+    });
+
+    return result;
+  }, [scholarships, searchTerm, degreeFilter, sortOrder]);
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setDegreeFilter([]);
+    setSortOrder('deadline_asc');
+  }
+
+  const FilterContent = () => (
+    <div className="space-y-6">
+        {/* Sort Controls */}
+        <div>
+            <label className="text-sm font-semibold text-slate-700 block mb-2">Sort by</label>
+            <select 
+              value={sortOrder} 
+              onChange={e => setSortOrder(e.target.value)} 
+              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow bg-white"
+            >
+                <option value="deadline_asc">Deadline (Soonest)</option>
+                <option value="deadline_desc">Deadline (Latest)</option>
+                <option value="funding_asc">Funding (Low to High)</option>
+                <option value="funding_desc">Funding (High to Low)</option>
+            </select>
+        </div>
+
+        {/* Degree Filter */}
+        <div>
+            <label className="text-sm font-semibold text-slate-700 block mb-2">Degree Type</label>
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                {DEGREE_OPTIONS.map(degree => (
+                    <label key={degree} className="flex items-center space-x-2 cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          checked={degreeFilter.includes(degree)} 
+                          onChange={() => handleDegreeFilterChange(degree)} 
+                          className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                        />
+                        <span className="text-slate-600">{degree}</span>
+                    </label>
+                ))}
+            </div>
+        </div>
+        
+        <div className="pt-4 border-t border-slate-200">
+             <button 
+              onClick={clearFilters} 
+              className="w-full text-center px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+            >
+              Clear All Filters
+            </button>
+        </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-slate-100">
-      {/* Header Section */}
-      <header className="bg-white shadow-sm sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Explore Scholarships</h1>
-          <p className="text-slate-500 text-lg">Find the perfect funding opportunity to fuel your ambitions.</p>
-        </div>
-         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Search Input */}
-                <div className="relative">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-                    <input 
-                        type="text" 
-                        placeholder="Search by title, provider, or location..."
-                        value={searchTerm}
-                        onChange={e => {
-                            setSearchTerm(e.target.value)
-                            setCurrentPage(1)
-                        }}
-                        className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                    />
+    <div className="min-h-screen bg-slate-50 pt-24 pb-12">
+        {/* Header */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
+                    Find Your Scholarship
+                </h1>
+                <p className="mt-4 max-w-2xl mx-auto text-xl text-slate-500">
+                    Explore opportunities across Africa and beyond. Your future awaits.
+                </p>
+                  <div className="mt-2 text-center">
+                    {isFirebaseInitialized ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                        <Database size={12} />
+                        Live Database
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200" title="Add Firebase keys to .env to connect">
+                        <HardDrive size={12} />
+                        Local Demo Mode
+                      </span>
+                    )}
                 </div>
-                {/* Filter Dropdown */}
-                 <div className="relative">
-                    <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-                    <select 
-                        value={filterDegree}
-                        onChange={e => {
-                            setFilterDegree(e.target.value)
-                            setCurrentPage(1)
-                        }}
-                        className="w-full pl-11 pr-4 py-3 border appearance-none bg-white border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+            </div>
+
+            {/* Search Bar */}
+             <div className="mb-8 sticky top-20 z-20 bg-slate-50/80 backdrop-blur-md -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4 border-b border-slate-200">
+                <div className="max-w-7xl mx-auto flex gap-4">
+                    <div className="relative flex-grow">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                        <input 
+                            type="text" 
+                            placeholder="Search by title, provider, or keyword..." 
+                            value={searchTerm} 
+                            onChange={e => setSearchTerm(e.target.value)} 
+                            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all shadow-sm"
+                        />
+                    </div>
+                    <button 
+                      onClick={() => setIsFilterMenuOpen(true)} 
+                      className="flex-shrink-0 flex items-center gap-2 px-4 py-3 bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors shadow-sm md:hidden"
                     >
-                        {degreeTypes.map(d => <option key={d} value={d}>{d}</option>)}
-                    </select>
-                 </div>
+                        <Filter size={18}/>
+                        <span>Filters</span>
+                         {degreeFilter.length > 0 && 
+                          <span className="bg-brand-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">{degreeFilter.length}</span>
+                        }
+                    </button>
+                </div>
             </div>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {loading ? (
-          <div className="flex justify-center items-center h-96">
-            <Loader2 className="animate-spin text-brand-600" size={48} />
-          </div>
-        ) : (
-          <>
-            <div className="mb-8 text-sm text-slate-600">
-              Showing <span className="font-semibold text-slate-800">{paginatedScholarships.length}</span> of <span className="font-semibold text-slate-800">{filteredScholarships.length}</span> matching scholarships.
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 lg:gap-12">
+        {/* Desktop Filters */}
+        <aside className="hidden md:block w-full md:w-64 lg:w-72 flex-shrink-0">
+            <div className="sticky top-44">
+               <h3 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Filters</h3>
+               <FilterContent />
             </div>
-            {paginatedScholarships.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {paginatedScholarships.map(scholarship => (
-                        <ScholarshipCard key={scholarship.id} data={scholarship} />
-                    ))}
-                </div>
-            ) : (
-                <div className="text-center py-24 bg-white rounded-xl border border-dashed">
-                    <h3 className="text-xl font-semibold text-slate-800">No Matching Scholarships Found</h3>
-                    <p className="text-slate-500 mt-2">Try adjusting your search or filter criteria.</p>
-                </div>
-            )}
+        </aside>
 
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-4 mt-16">
-                <button 
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-md text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                    <ArrowLeft size={16} /> Previous
-                </button>
-                
-                <span className="text-sm font-medium text-slate-600">
-                    Page {currentPage} of {totalPages}
-                </span>
+        {/* Scholarship Grid */}
+        <main className="flex-grow min-w-0">
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <Loader2 className="animate-spin text-brand-600" size={48} />
+            </div>
+          ) : filteredAndSortedScholarships.length > 0 ? (
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredAndSortedScholarships.map(scholarship => (
+                <ScholarshipCard key={scholarship.id} data={scholarship} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20 border-2 border-dashed border-slate-200 rounded-lg">
+                <h3 className="text-xl font-semibold text-slate-700">No Matching Scholarships</h3>
+                <p className="text-slate-500 mt-2">Try adjusting your search or filter criteria.</p>
+            </div>
+          )}
+        </main>
+      </div>
 
-                <button 
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-md text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                    Next <ArrowRight size={16} />
+      {/* Mobile Filter Modal */}
+      {isFilterMenuOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200 md:hidden">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto flex flex-col">
+              <div className="p-4 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
+                <h2 className="text-lg font-bold text-slate-900">Filters</h2>
+                <button onClick={() => setIsFilterMenuOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                  <X size={24} />
                 </button>
               </div>
-            )}
-          </>
+              <div className="p-6 flex-grow">
+                <FilterContent />
+              </div>
+                <div className="p-4 border-t bg-slate-50 sticky bottom-0">
+                    <button onClick={() => setIsFilterMenuOpen(false)} className="w-full bg-brand-600 text-white font-semibold py-2.5 rounded-lg hover:bg-brand-700 transition-all">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+          </div>
         )}
-      </main>
     </div>
   );
 };

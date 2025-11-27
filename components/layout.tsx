@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, GraduationCap } from 'lucide-react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,9 +32,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <div className="flex-shrink-0">
-              <Link href="/" className="text-2xl font-bold text-brand-700 hover:text-brand-800 transition-colors">
-                Funded Futures Africa
-              </Link>
+                <Link href="/" className="flex items-center gap-2 group">
+                    <div className="bg-brand-600 text-white p-1.5 rounded-lg group-hover:bg-brand-700 transition-colors">
+                        <GraduationCap size={24} />
+                    </div>
+                    <span className="font-bold text-xl tracking-tight text-slate-900">
+                        Funded Futures<span className="text-brand-600"> Africa</span>
+                    </span>
+                </Link>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
