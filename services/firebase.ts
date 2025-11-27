@@ -1,3 +1,4 @@
+
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { 
   getFirestore, 
@@ -9,7 +10,8 @@ import {
   doc,
   Firestore,
   orderBy,
-  query
+  query,
+  Timestamp // Import Timestamp
 } from 'firebase/firestore';
 import { 
   getAuth, 
@@ -23,32 +25,13 @@ import { Scholarship, ScholarshipFormData } from '../types';
 
 // --- CONFIGURATION ---
 
-// Helper to safely access environment variables in various environments (Vite, CRA, Standard Node)
-const getEnvVar = (name: string): string | undefined => {
-  // Check process.env (Standard Node / Create React App)
-  if (typeof process !== 'undefined' && process.env) {
-    return process.env[`REACT_APP_${name}`] || process.env[`VITE_${name}`] || process.env[name];
-  }
-  // Check import.meta.env (Vite standard)
-  try {
-    // @ts-ignore
-    if (typeof import.meta !== 'undefined' && import.meta.env) {
-      // @ts-ignore
-      return import.meta.env[`VITE_${name}`] || import.meta.env[name];
-    }
-  } catch (e) {
-    // Ignore errors if import.meta is not supported
-  }
-  return undefined;
-};
-
 const firebaseConfig = {
-  apiKey: getEnvVar('FIREBASE_API_KEY'),
-  authDomain: getEnvVar('FIREBASE_AUTH_DOMAIN'),
-  projectId: getEnvVar('FIREBASE_PROJECT_ID'),
-  storageBucket: getEnvVar('FIREBASE_STORAGE_BUCKET'),
-  messagingSenderId: getEnvVar('FIREBASE_MESSAGING_SENDER_ID'),
-  appId: getEnvVar('FIREBASE_APP_ID')
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 let app: FirebaseApp | undefined;
@@ -57,9 +40,8 @@ let auth: Auth | undefined;
 
 export let isFirebaseInitialized = false;
 
-// Attempt to initialize Firebase
 try {
-  if (firebaseConfig.apiKey) {
+  if (firebaseConfig.apiKey && firebaseConfig.projectId) {
     app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     db = getFirestore(app);
     auth = getAuth(app);
@@ -81,15 +63,13 @@ export const loginAdmin = async (email: string, password: string) => {
   if (isFirebaseInitialized && auth) {
     return signInWithEmailAndPassword(auth, email, password);
   }
-  
-  // FALLBACK FOR DEMO MODE
-  // In a real app, you wouldn't have this hardcoded, but it's useful for the demo
-  // if the user hasn't set up Firebase keys yet.
-  if (password === 'admin123') {
-    return { user: { email, uid: 'demo-user-123' } };
+
+  if (email.toLowerCase() === 'admin@fundedfuturesafrica.com' && password === 'sudoAfrica!') {
+    console.log("Authenticated with demo credentials.");
+    return { user: { email: 'admin@fundedfuturesafrica.com', uid: 'demo-admin-user' } };
   }
-  
-  throw new Error("Invalid credentials. (Demo mode: use password 'admin123')");
+
+  throw new Error("Invalid credentials for demo mode.");
 };
 
 export const logoutAdmin = async () => {
@@ -103,9 +83,18 @@ export const subscribeToAuth = (callback: (user: User | { email: string; uid: st
   if (isFirebaseInitialized && auth) {
     return onAuthStateChanged(auth, callback);
   }
-  // Demo mode doesn't have a listener, so we return a no-op unsubscribe function.
-  // The Admin component handles session storage for demo mode.
   return () => {};
+};
+
+// --- DATA CONVERSION HELPER ---
+const mapFirebaseDocToScholarship = (doc: any): Scholarship => {
+  const data = doc.data();
+  // Firestore's Timestamp object needs to be converted to a number (milliseconds)
+  // to match the structure used throughout the app (Date.now())
+  if (data.createdAt && data.createdAt instanceof Timestamp) {
+    data.createdAt = data.createdAt.toMillis();
+  }
+  return { id: doc.id, ...data } as Scholarship;
 };
 
 
@@ -124,52 +113,25 @@ const MOCK_DATA: Scholarship[] = [
     description: 'A prestigious award for high-achieving students across the continent looking to pursue postgraduate studies in development sciences.',
     createdAt: Date.now()
   },
-  {
-    id: '2',
-    title: 'Tech Leaders of Tomorrow',
-    provider: 'Global Tech Initiative',
-    degree: 'Bachelors',
-    fundingAmount: '$5,000 / year',
-    deadline: '2024-06-15',
-    location: 'Remote / Online',
-    externalLink: 'https://example.com',
-    imageUrl: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800',
-    description: 'Supporting the next generation of software engineers and data scientists in Africa. Includes laptop and internet stipend.',
-    createdAt: Date.now() - 100000
-  },
-  {
-    id: '3',
-    title: 'Health Sciences Grant',
-    provider: 'MediCorp Africa',
-    degree: 'PhD',
-    fundingAmount: 'Research Grant $15k',
-    deadline: '2024-08-01',
-    location: 'Cape Town, South Africa',
-    externalLink: 'https://example.com',
-    imageUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800',
-    description: 'Funding for advanced research in public health and epidemiology. Open to all African nationals.',
-    createdAt: Date.now() - 200000
-  }
 ];
 
 // --- DATABASE SERVICE METHODS ---
 
 export const getScholarships = async (): Promise<Scholarship[]> => {
-  if (isFirebaseInitialized && db) {
-    try {
-      const q = query(collection(db, COLLECTION_NAME), orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Scholarship));
-      return data;
-    } catch (e) {
-      console.error("Error fetching from Firebase:", e);
-      // Fallback only on error, or you could re-throw
-      return getLocalScholarships();
-    }
+  if (!isFirebaseInitialized) {
+    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network latency
+    return getLocalScholarships();
   }
-  // Simulate network delay for realism in demo mode
-  await new Promise(resolve => setTimeout(resolve, 600));
-  return getLocalScholarships();
+
+  try {
+    const q = query(collection(db, COLLECTION_NAME), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    // Use the helper to correctly map the data
+    return querySnapshot.docs.map(mapFirebaseDocToScholarship);
+  } catch (e) {
+    console.error("Error fetching from Firebase:", e);
+    return getLocalScholarships(); // Fallback
+  }
 };
 
 export const createScholarship = async (data: ScholarshipFormData): Promise<void> => {
@@ -177,15 +139,15 @@ export const createScholarship = async (data: ScholarshipFormData): Promise<void
     try {
       await addDoc(collection(db, COLLECTION_NAME), {
         ...data,
-        createdAt: Date.now()
+        createdAt: Date.now(),
       });
-      return;
-    } catch (e) {
-      console.error("Error creating in Firebase:", e);
-      throw e;
+    } catch (error) {
+      console.error("Error creating in Firebase:", error);
+      throw error; // Re-throw to be handled by the calling UI
     }
+  } else {
+    await createLocalScholarship(data);
   }
-  createLocalScholarship(data);
 };
 
 export const updateScholarship = async (id: string, data: Partial<ScholarshipFormData>): Promise<void> => {
@@ -193,57 +155,76 @@ export const updateScholarship = async (id: string, data: Partial<ScholarshipFor
     try {
       const scholarshipRef = doc(db, COLLECTION_NAME, id);
       await updateDoc(scholarshipRef, data);
-      return;
-    } catch (e) {
-      console.error("Error updating in Firebase:", e);
-      throw e;
+    } catch (error) {
+      console.error("Error updating in Firebase:", error);
+      throw error; // Re-throw
     }
+  } else {
+    await updateLocalScholarship(id, data);
   }
-  updateLocalScholarship(id, data);
 };
 
 export const deleteScholarship = async (id: string): Promise<void> => {
   if (isFirebaseInitialized && db) {
     try {
       await deleteDoc(doc(db, COLLECTION_NAME, id));
-      return;
-    } catch (e) {
-      console.error("Error deleting from Firebase:", e);
-      throw e;
+    } catch (error) {
+      console.error("Error deleting from Firebase:", error);
+      throw error; // Re-throw
     }
+  } else {
+    await deleteLocalScholarship(id);
   }
-  deleteLocalScholarship(id);
 };
 
 // --- LOCAL STORAGE HELPERS (FALLBACK) ---
 
-const getLocalScholarships = (): Scholarship[] => {
-  const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (!stored) {
+const safelyGetLocalStorage = (): Scholarship[] => {
+  if (typeof window === 'undefined') return MOCK_DATA;
+
+  const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (!storedData) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(MOCK_DATA));
     return MOCK_DATA;
   }
-  return JSON.parse(stored);
+
+  try {
+    return JSON.parse(storedData);
+  } catch (error) {
+    console.error("Error parsing local storage data:", error);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(MOCK_DATA));
+    return MOCK_DATA;
+  }
 };
 
-const createLocalScholarship = (data: ScholarshipFormData) => {
-  const current = getLocalScholarships();
-  const newItem: Scholarship = {
+const getLocalScholarships = (): Scholarship[] => {
+  return safelyGetLocalStorage();
+};
+
+const createLocalScholarship = async (data: ScholarshipFormData): Promise<void> => {
+  await new Promise(resolve => setTimeout(resolve, 300)); // Simulate latency
+  const currentScholarships = safelyGetLocalStorage();
+  const newScholarship: Scholarship = {
     ...data,
-    id: Math.random().toString(36).substr(2, 9),
-    createdAt: Date.now()
+    id: `local_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`, // More robust ID
+    createdAt: Date.now(),
   };
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([newItem, ...current]));
+  const updatedScholarships = [newScholarship, ...currentScholarships];
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedScholarships));
 };
 
-const updateLocalScholarship = (id: string, data: Partial<ScholarshipFormData>) => {
-  const current = getLocalScholarships();
-  const updated = current.map(item => item.id === id ? { ...item, ...data } : item);
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+const updateLocalScholarship = async (id: string, data: Partial<ScholarshipFormData>): Promise<void> => {
+  await new Promise(resolve => setTimeout(resolve, 300)); // Simulate latency
+  const currentScholarships = safelyGetLocalStorage();
+  const updatedScholarships = currentScholarships.map(s =>
+    s.id === id ? { ...s, ...data } : s
+  );
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedScholarships));
 };
 
-const deleteLocalScholarship = (id: string) => {
-  const current = getLocalScholarships();
-  const filtered = current.filter(item => item.id !== id);
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
+const deleteLocalScholarship = async (id: string): Promise<void> => {
+  await new Promise(resolve => setTimeout(resolve, 300)); // Simulate latency
+  const currentScholarships = safelyGetLocalStorage();
+  const updatedScholarships = currentScholarships.filter(s => s.id !== id);
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedScholarships));
 };

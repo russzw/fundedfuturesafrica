@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-2 mb-4">
               <GraduationCap className="text-brand-500" size={24} />
               <span className="font-bold text-xl text-white">
-                Funded<span className="text-brand-500">Futures</span>
+                Funded Futures<span className="text-brand-500"> Africa</span>
               </span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
