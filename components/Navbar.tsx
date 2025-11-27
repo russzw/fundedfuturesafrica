@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,30 +19,32 @@ export const Navbar: React.FC = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const router = useRouter();
 
-  // Handle scroll effect for "disappear thingy"
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsOpen(false);
+    };
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router]);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
-      // Always show if at the top
       if (currentScrollY < 10) {
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        // Scrolling down & past threshold -> Hide
         setIsVisible(false);
       } else if (currentScrollY < lastScrollY) {
-        // Scrolling up -> Show
         setIsVisible(true);
       }
-      
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
-
-  const closeMenu = () => setIsOpen(false);
 
   return (
     <nav 
@@ -54,7 +57,7 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={closeMenu}>
+            <Link href="/" className="flex-shrink-0 flex items-center gap-2 group">
               <div className="bg-brand-600 text-white p-1.5 rounded-lg group-hover:bg-brand-700 transition-colors">
                 <GraduationCap size={24} />
               </div>
@@ -64,7 +67,6 @@ export const Navbar: React.FC = () => {
             </Link>
           </div>
           
-          {/* Desktop Menu */}
           <div className="hidden md:flex md:items-center md:space-x-8">
             {NAV_ITEMS.map((item) => {
                 const isActive = router.pathname === item.path;
@@ -91,7 +93,6 @@ export const Navbar: React.FC = () => {
             </a>
           </div>
 
-          {/* Mobile menu button */}
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -104,7 +105,6 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div 
         className={`md:hidden absolute w-full bg-white/95 backdrop-blur-xl border-b border-slate-200 transition-all duration-300 ease-in-out origin-top ${
           isOpen ? 'opacity-100 scale-y-100 max-h-screen' : 'opacity-0 scale-y-0 max-h-0'
@@ -117,7 +117,6 @@ export const Navbar: React.FC = () => {
                 <Link
                     key={item.path}
                     href={item.path}
-                    onClick={closeMenu}
                     className={`block px-4 py-3 rounded-lg text-base font-medium transition-all ${
                         isActive
                         ? 'text-brand-700 bg-brand-50/80'

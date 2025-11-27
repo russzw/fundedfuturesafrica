@@ -1,9 +1,12 @@
 import Link from 'next/link';
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { Menu, X, GraduationCap } from 'lucide-react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/scholarships', label: 'Scholarships' },
@@ -11,15 +14,32 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     { href: '/admin', label: 'Admin' }
   ];
 
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsOpen(false);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
       <header className="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-30 shadow-sm border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <div className="flex-shrink-0">
-              <Link href="/" className="text-2xl font-bold text-brand-700 hover:text-brand-800 transition-colors">
-                Funded Futures Africa
-              </Link>
+                <Link href="/" className="flex items-center gap-2 group">
+                    <div className="bg-brand-600 text-white p-1.5 rounded-lg group-hover:bg-brand-700 transition-colors">
+                        <GraduationCap size={24} />
+                    </div>
+                    <span className="font-bold text-xl tracking-tight text-slate-900">
+                        Funded Futures<span className="text-brand-600"> Africa</span>
+                    </span>
+                </Link>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
@@ -63,9 +83,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <footer className="bg-slate-100 border-t border-slate-200">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-slate-500">
               <p>&copy; {new Date().getFullYear()} Funded Futures Africa. All rights reserved.</p>
-              <p className="mt-2">
-                  Built by <a href="https://devruss.me" target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-600 hover:underline">dev🔥russ</a>
-              </p>
+              <p>Built by <a href="https://devruss.me" target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-600 hover:underline">dev🔥russ</a></p>
           </div>
       </footer>
     </div>

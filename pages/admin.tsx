@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Lock, Plus, X, Loader2, LogOut, AlertTriangle, Trash2, Database, HardDrive, Mail, Key } from 'lucide-react';
 import { 
   getScholarships, 
@@ -31,7 +31,6 @@ const AdminPage: React.FC = () => {
   // Auth State
   const [user, setUser] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
   
   // Login Form State
   const [email, setEmail] = useState('');
@@ -49,9 +48,36 @@ const AdminPage: React.FC = () => {
   
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<ScholarshipFormData>(INITIAL_FORM);
+  
+  // Auto-logout state
+  const [isInactive, setIsInactive] = useState(false);
+  const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
+  
+  const handleLogout = useCallback(async () => {
+    await logoutAdmin();
+    setUser(null);
+    setScholarships([]);
+    if (!isFirebaseInitialized) {
+      sessionStorage.removeItem('ffa_auth_user');
+    }
+    setIsInactive(false);
+  }, []);
 
-  // Initialize Auth Listener
+  // Auth Listener & Inactivity Timer
   useEffect(() => {
+    let inactivityTimer: NodeJS.Timeout;
+    
+    const resetTimer = () => {
+      setIsInactive(false);
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        setIsInactive(true);
+        handleLogout();
+      }, INACTIVITY_TIMEOUT);
+    };
+
+    const handleActivity = () => resetTimer();
+
     // If Firebase is active, we listen to the real auth state
     if (isFirebaseInitialized) {
       const unsubscribe = subscribeToAuth((currentUser) => {
@@ -59,19 +85,41 @@ const AdminPage: React.FC = () => {
         setAuthLoading(false);
         if (currentUser) {
           loadData();
+          // Start inactivity tracking only when logged in
+          window.addEventListener('mousemove', handleActivity);
+          window.addEventListener('keydown', handleActivity);
+          resetTimer();
+        } else {
+          // Stop tracking when logged out
+          window.removeEventListener('mousemove', handleActivity);
+          window.removeEventListener('keydown', handleActivity);
+          clearTimeout(inactivityTimer);
         }
       });
-      return () => unsubscribe();
+      return () => {
+        unsubscribe();
+        window.removeEventListener('mousemove', handleActivity);
+        window.removeEventListener('keydown', handleActivity);
+        clearTimeout(inactivityTimer);
+      };
     } else {
-      // Fallback for Demo Mode: Check sessionStorage
+      // Fallback for Demo Mode
       const storedAuth = sessionStorage.getItem('ffa_auth_user');
       if (storedAuth) {
         setUser(JSON.parse(storedAuth));
         loadData();
+        window.addEventListener('mousemove', handleActivity);
+        window.addEventListener('keydown', handleActivity);
+        resetTimer();
       }
       setAuthLoading(false);
+       return () => {
+        window.removeEventListener('mousemove', handleActivity);
+        window.removeEventListener('keydown', handleActivity);
+        clearTimeout(inactivityTimer);
+      };
     }
-  }, []);
+  }, [handleLogout]);
 
   const loadData = async () => {
     setDataLoading(true);
@@ -90,8 +138,6 @@ const AdminPage: React.FC = () => {
 
     try {
       const userCredential = await loginAdmin(email, password);
-      // If Firebase is initialized, the onAuthStateChanged listener will handle state update.
-      // If NOT initialized (Demo Mode), we need to set it manually.
       if (!isFirebaseInitialized) {
         setUser(userCredential.user);
         sessionStorage.setItem('ffa_auth_user', JSON.stringify(userCredential.user));
@@ -108,14 +154,6 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await logoutAdmin();
-    setUser(null);
-    setScholarships([]);
-    if (!isFirebaseInitialized) {
-      sessionStorage.removeItem('ffa_auth_user');
-    }
-  };
 
   const isValidUrl = (urlString: string) => {
     try { 
@@ -129,7 +167,6 @@ const AdminPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation
     if (!isValidUrl(formData.externalLink)) {
       alert('Please enter a valid External Link URL (e.g., https://example.com)');
       return;
@@ -203,7 +240,6 @@ const AdminPage: React.FC = () => {
     );
   }
 
-  // Login View
   if (!user) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 px-4">
@@ -220,6 +256,13 @@ const AdminPage: React.FC = () => {
               : "Demo Mode: Use any email and 'admin123'"}
           </p>
           
+          {isInactive && (
+            <div className="bg-yellow-50 text-yellow-700 text-sm p-3 rounded-lg flex items-start gap-2 mb-4 animate-pulse">
+                <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
+                <span>You have been logged out due to inactivity.</span>
+            </div>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Email</label>
@@ -348,7 +391,6 @@ const AdminPage: React.FC = () => {
           </div>
         )}
 
-        {/* Delete Confirmation Modal */}
         {deleteId && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden scale-100 transform transition-all">
@@ -380,7 +422,6 @@ const AdminPage: React.FC = () => {
           </div>
         )}
 
-        {/* Edit/Create Form Modal */}
         {isFormOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
