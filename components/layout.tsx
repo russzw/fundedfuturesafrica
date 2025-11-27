@@ -1,15 +1,30 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Menu, X } from 'lucide-react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/scholarships', label: 'Scholarships' },
     { href: '/about', label: 'About' },
     { href: '/admin', label: 'Admin' }
   ];
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsOpen(false);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
@@ -63,9 +78,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <footer className="bg-slate-100 border-t border-slate-200">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-slate-500">
               <p>&copy; {new Date().getFullYear()} Funded Futures Africa. All rights reserved.</p>
-              <p className="mt-2">
-                  Built by <a href="https://devruss.me" target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-600 hover:underline">dev🔥russ</a>
-              </p>
+              <p>Built by <a href="https://devruss.me" target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-600 hover:underline">dev🔥russ</a></p>
           </div>
       </footer>
     </div>

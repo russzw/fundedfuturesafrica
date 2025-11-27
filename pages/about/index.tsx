@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Globe, Users, Target, Handshake, Mail, Send } from 'lucide-react';
+import { Globe, Users, Target, Handshake, Mail, Send, CheckCircle } from 'lucide-react';
 
 const TeamMemberCard = ({ name, role, imageUrl }: { name: string, role: string, imageUrl: string }) => (
     <div className="text-center">
@@ -12,15 +12,23 @@ const TeamMemberCard = ({ name, role, imageUrl }: { name: string, role: string, 
 );
 
 const AboutPage: React.FC = () => {
+  const whatWeDoItems = [
+    { text: 'Curate verified scholarships', icon: <CheckCircle/> },
+    { text: 'Provide deadline reminders and email alerts', icon: <CheckCircle/> },
+    { text: 'Share application guidance', icon: <CheckCircle/> },
+    { text: 'Publish academic resources', icon: <CheckCircle/> },
+    { text: 'Highlight programs across all continents', icon: <CheckCircle/> }
+  ];
+
   return (
     <div className="min-h-screen bg-slate-50">
       
-      {/* Hero Section */}
+      {/* Hero Section (Who We Are) */}
       <header className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 text-center">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">About Funded Futures<span className="text-brand-600"> Africa</span></h1>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Who We Are</h1>
             <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
-                We are dedicated to breaking down the financial barriers that prevent talented African students from accessing world-class education.
+                Funded Futures Africa is a dedicated platform committed to connecting African scholars with global academic opportunities. We curate verified, accessible, and high-impact scholarships for students at every academic stage.
             </p>
         </div>
       </header>
@@ -35,7 +43,7 @@ const AboutPage: React.FC = () => {
                         <h2 className="text-3xl font-bold text-slate-900">Our Mission</h2>
                     </div>
                     <p className="text-lg text-slate-600 leading-relaxed">
-                        To expand access to world-class education for African students by making scholarship information clear, reliable, and easy to navigate. We believe that financial constraints should never limit potential.
+                        To expand access to world-class education for African students by making scholarship information clear, reliable, and easy to navigate.
                     </p>
                 </div>
                 <div className="space-y-6">
@@ -44,15 +52,34 @@ const AboutPage: React.FC = () => {
                          <h2 className="text-3xl font-bold text-slate-900">Our Vision</h2>
                     </div>
                     <p className="text-lg text-slate-600 leading-relaxed">
-                        A future where every talented student from Africa has the opportunity to achieve their educational and career aspirations, creating a new generation of leaders who will drive positive change across the continent.
+                        An Africa where every motivated student, regardless of background, can access global learning opportunities.
                     </p>
                 </div>
             </div>
           </div>
       </section>
+
+      {/* What We Do Section */}
+      <section className="bg-white py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">What We Do</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {whatWeDoItems.map((item, index) => (
+              <div key={index} className="flex items-start space-x-4">
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center">
+                  {item.icon}
+                </div>
+                <p className="text-lg text-slate-600">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       
       {/* Our Story Section */}
-      <section className="bg-white py-20 md:py-28">
+      <section className="bg-slate-50 py-20 md:py-28 border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div>
@@ -71,7 +98,7 @@ const AboutPage: React.FC = () => {
       </section>
 
        {/* Team Section */}
-        <section className="bg-slate-50 py-20 md:py-28 border-y border-slate-200">
+        <section className="bg-white py-20 md:py-28">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Meet Our Team</h2>
@@ -87,7 +114,7 @@ const AboutPage: React.FC = () => {
         </section>
 
       {/* Contact Section */}
-      <section className="bg-white py-20 md:py-28">
+      <section className="bg-slate-50 py-20 md:py-28 border-t border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
            <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Get in Touch</h2>

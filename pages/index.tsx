@@ -154,12 +154,6 @@ const HomePage: React.FC = () => {
                 </div>
             </div>
         </section>
-
-        <footer className="text-center py-6 bg-slate-100 border-t border-slate-200">
-            <p className="text-sm text-slate-500">
-                Built by <a href="https://devruss.me" target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-600 hover:underline">dev🔥russ</a>
-            </p>
-        </footer>
     </div>
   );
 };

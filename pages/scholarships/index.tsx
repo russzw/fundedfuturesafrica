@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Search, Loader2, Filter, ArrowLeft, ArrowRight } from 'lucide-react';
-import { getScholarships } from '../services/firebase';
-import { Scholarship } from '../types';
-import { ScholarshipCard } from '../components/ScholarshipCard';
+import { getScholarships } from '../../services/firebase';
+import { Scholarship } from '../../types';
+import { ScholarshipCard } from '../../components/ScholarshipCard';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
 
 const ScholarshipsPage: React.FC = () => {
   const [allScholarships, setAllScholarships] = useState<Scholarship[]>([]);
