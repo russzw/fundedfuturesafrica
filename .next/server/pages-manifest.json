@@ -5,7 +5,6 @@
   "/_error": "pages/_error.js",
   "/about": "pages/about.html",
   "/admin": "pages/admin.html",
-  "/api/seed": "pages/api/seed.js",
   "/resources": "pages/resources.html",
   "/scholarships": "pages/scholarships.html",
   "/404": "pages/404.html"

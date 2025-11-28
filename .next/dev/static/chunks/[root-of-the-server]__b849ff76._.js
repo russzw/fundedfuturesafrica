@@ -868,7 +868,9 @@ const MOCK_DATA = [
         id: '1',
         title: 'Pan-African Excellence Award',
         provider: 'African Union Foundation',
-        degree: 'Masters',
+        degree: [
+            'Masters'
+        ],
         fundingAmount: 'Full Tuition + Stipend',
         deadline: '2024-05-30',
         location: 'Addis Ababa, Ethiopia',
