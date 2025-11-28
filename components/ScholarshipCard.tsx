@@ -62,7 +62,7 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-3 mb-5 text-sm text-slate-700">
           <div className="flex items-center gap-2">
             <GraduationCap size={16} className="text-brand-600 flex-shrink-0" />
-            <span className="truncate font-medium">{data.degree}</span>
+            <span className="truncate font-medium">{Array.isArray(data.degree) ? data.degree.join(', ') : data.degree}</span>
           </div>
           <div className="flex items-center gap-2">
             <Banknote size={16} className="text-brand-600 flex-shrink-0" />
