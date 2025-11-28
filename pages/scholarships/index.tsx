@@ -54,7 +54,11 @@ const ScholarshipsPage = () => {
     }
 
     if (degreeFilter.length > 0) {
-      result = result.filter(s => degreeFilter.includes(s.degree));
+        result = result.filter(s => 
+            Array.isArray(s.degree) 
+                ? s.degree.some(d => degreeFilter.includes(d))
+                : degreeFilter.includes(s.degree)
+        );
     }
 
     // Sorting

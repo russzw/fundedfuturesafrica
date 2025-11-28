@@ -15,10 +15,25 @@ import {
 import { Scholarship, ScholarshipFormData } from '../types';
 import { ScholarshipCard } from '../components/ScholarshipCard';
 
+const DEGREE_OPTIONS = [
+  "High School",
+  "Diploma",
+  "Bachelors",
+  "Masters",
+  "PhD",
+  "Post-Doc",
+  "Fellowship",
+  "Vocational",
+  "Research",
+  "Internship",
+  "Bootcamp",
+  "Other"
+];
+
 const INITIAL_FORM: ScholarshipFormData = {
   title: '',
   provider: '',
-  degree: 'Masters',
+  degree: [],
   fundingAmount: '',
   deadline: '',
   location: '',
@@ -200,7 +215,7 @@ const AdminPage: React.FC = () => {
     setFormData({
       title: scholarship.title,
       provider: scholarship.provider,
-      degree: scholarship.degree,
+      degree: Array.isArray(scholarship.degree) ? scholarship.degree : [scholarship.degree],
       fundingAmount: scholarship.fundingAmount,
       deadline: scholarship.deadline,
       location: scholarship.location,
@@ -230,6 +245,15 @@ const AdminPage: React.FC = () => {
       setDataLoading(false);
       setDeleteId(null);
     }
+  };
+  
+  const handleDegreeChange = (degree: string) => {
+    setFormData(prev => {
+      const newDegrees = prev.degree.includes(degree)
+        ? prev.degree.filter(d => d !== degree)
+        : [...prev.degree, degree];
+      return { ...prev, degree: newDegrees };
+    });
   };
 
   if (authLoading) {
@@ -456,26 +480,21 @@ const AdminPage: React.FC = () => {
                       placeholder="e.g. African Union"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Degree Type</label>
-                    <select
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow bg-white"
-                      value={formData.degree}
-                      onChange={e => setFormData({...formData, degree: e.target.value})}
-                    >
-                      <option value="High School">High School</option>
-                      <option value="Diploma">Diploma</option>
-                      <option value="Bachelors">Bachelors</option>
-                      <option value="Masters">Masters</option>
-                      <option value="PhD">PhD</option>
-                      <option value="Post-Doc">Post-Doc</option>
-                      <option value="Fellowship">Fellowship</option>
-                      <option value="Vocational">Vocational</option>
-                      <option value="Research">Research</option>
-                      <option value="Internship">Internship</option>
-                      <option value="Bootcamp">Bootcamp</option>
-                      <option value="Other">Other</option>
-                    </select>
+                  <div className="md:col-span-2 space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">Degree Types</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-2">
+                      {DEGREE_OPTIONS.map(degree => (
+                        <label key={degree} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                           <input
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                            checked={formData.degree.includes(degree)}
+                            onChange={() => handleDegreeChange(degree)}
+                          />
+                          {degree}
+                        </label>
+                      ))}
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Deadline</label>

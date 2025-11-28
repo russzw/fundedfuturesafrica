@@ -2,7 +2,7 @@ export interface Scholarship {
   id: string;
   title: string;
   provider: string;
-  degree: string;
+  degree: string[];
   fundingAmount: string;
   deadline: string;
   location: string;

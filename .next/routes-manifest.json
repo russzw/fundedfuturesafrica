@@ -40,12 +40,6 @@
       "namedRegex": "^/admin(?:/)?$"
     },
     {
-      "page": "/api/seed",
-      "regex": "^/api/seed(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/seed(?:/)?$"
-    },
-    {
       "page": "/resources",
       "regex": "^/resources(?:/)?$",
       "routeKeys": {},

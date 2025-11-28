@@ -588,7 +588,7 @@ const ScholarshipCard = ({ data, adminMode, onEdit, onDelete })=>{
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         className: "truncate font-medium",
-                                        children: data.degree
+                                        children: Array.isArray(data.degree) ? data.degree.join(', ') : data.degree
                                     }, void 0, false, {
                                         fileName: "[project]/components/ScholarshipCard.tsx",
                                         lineNumber: 65,
@@ -868,7 +868,9 @@ const MOCK_DATA = [
         id: '1',
         title: 'Pan-African Excellence Award',
         provider: 'African Union Foundation',
-        degree: 'Masters',
+        degree: [
+            'Masters'
+        ],
         fundingAmount: 'Full Tuition + Stipend',
         deadline: '2024-05-30',
         location: 'Addis Ababa, Ethiopia',

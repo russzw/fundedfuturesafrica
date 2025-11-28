@@ -25,11 +25,26 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_react_e3593a73._.js",
       "static/chunks/node_modules_react-dom_cjs_react-dom_development_2b5e0eb3.js",
       "static/chunks/node_modules_react-dom_8a8085df._.js",
-      "static/chunks/node_modules_af0cd431._.js",
+      "static/chunks/node_modules_c4b97a68._.js",
       "static/chunks/[root-of-the-server]__e1d7e437._.js",
       "static/chunks/globals_7b75659e.css",
       "static/chunks/pages__app_2da965e7._.js",
-      "static/chunks/turbopack-pages__app_990810eb._.js"
+      "static/chunks/turbopack-pages__app_02ecb743._.js"
+    ],
+    "/admin": [
+      "static/chunks/[root-of-the-server]__3eed1a2b._.js",
+      "static/chunks/node_modules_next_dist_compiled_caaa605a._.js",
+      "static/chunks/node_modules_next_dist_shared_lib_82dc2e9d._.js",
+      "static/chunks/node_modules_next_dist_client_d0aa886c._.js",
+      "static/chunks/node_modules_next_dist_6024eba3._.js",
+      "static/chunks/node_modules_react_e3593a73._.js",
+      "static/chunks/node_modules_react-dom_cjs_react-dom_development_2b5e0eb3.js",
+      "static/chunks/node_modules_react-dom_8a8085df._.js",
+      "static/chunks/node_modules_@firebase_firestore_dist_index_esm_a1d87665.js",
+      "static/chunks/node_modules_@firebase_auth_dist_esm_40b5261f._.js",
+      "static/chunks/node_modules_ca4dd774._.js",
+      "static/chunks/pages_admin_2da965e7._.js",
+      "static/chunks/turbopack-pages_admin_a7207911._.js"
     ]
   },
   "devFiles": [],
