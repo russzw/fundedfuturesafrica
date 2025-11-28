@@ -34,7 +34,7 @@ const dummyScholarships: ScholarshipFormData[] = [
   {
     title: 'Tech Innovators Scholarship',
     provider: 'Codecademy',
-    degree: 'Certificate',
+    degree: ['Bootcamp'],
     fundingAmount: '$5,000',
     deadline: '2024-08-15',
     location: 'Remote',
@@ -45,7 +45,7 @@ const dummyScholarships: ScholarshipFormData[] = [
   {
     title: 'Future Leaders Grant',
     provider: 'Google',
-    degree: 'Bachelors',
+    degree: ['Bachelors'],
     fundingAmount: '$10,000',
     deadline: '2024-09-01',
     location: 'USA',
@@ -56,7 +56,7 @@ const dummyScholarships: ScholarshipFormData[] = [
   {
     title: 'Young African Scholars Program',
     provider: 'Mastercard Foundation',
-    degree: 'Masters',
+    degree: ['Masters', 'PhD'],
     fundingAmount: 'Full Coverage',
     deadline: '2024-07-31',
     location: 'Various African Universities',
@@ -67,7 +67,7 @@ const dummyScholarships: ScholarshipFormData[] = [
   {
     title: 'Women in STEM Scholarship',
     provider: 'Microsoft',
-    degree: 'PhD',
+    degree: ['PhD'],
     fundingAmount: '$20,000',
     deadline: '2024-10-10',
     location: 'Global',
@@ -78,7 +78,7 @@ const dummyScholarships: ScholarshipFormData[] = [
   {
     title: 'Art & Design Bursary',
     provider: 'Adobe',
-    degree: 'Associates',
+    degree: ['Diploma'],
     fundingAmount: '$2,500',
     deadline: '2024-06-30',
     location: 'Online',
@@ -89,7 +89,7 @@ const dummyScholarships: ScholarshipFormData[] = [
   {
     title: 'Environmental Sustainability Award',
     provider: 'United Nations',
-    degree: 'Post-doctoral',
+    degree: ['Post-Doc'],
     fundingAmount: 'Research Grant',
     deadline: '2024-11-01',
     location: 'International',
