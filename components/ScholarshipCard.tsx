@@ -1,6 +1,7 @@
 import React from 'react';
-import { MapPin, Calendar, Banknote, GraduationCap, ExternalLink, AlertCircle } from 'lucide-react';
+import { MapPin, Calendar, Banknote, GraduationCap, AlertCircle } from 'lucide-react';
 import { Scholarship } from '../types';
+import Link from 'next/link';
 
 interface Props {
   data: Scholarship;
@@ -10,7 +11,7 @@ interface Props {
 }
 
 export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDelete }) => {
-  // Date formatting and validation logic
+  const [isClicked, setIsClicked] = React.useState(false);
   const getDeadlineStatus = (dateString: string) => {
     const date = new Date(dateString);
     const isValid = !isNaN(date.getTime());
@@ -18,7 +19,7 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
     if (!isValid) return { isExpired: false, label: dateString };
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time for accurate day comparison
+    today.setHours(0, 0, 0, 0);
     const isExpired = date < today;
 
     const formattedDate = date.toLocaleDateString('en-US', {
@@ -99,20 +100,27 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
               </button>
             </div>
           ) : (
-            <a 
-              href={data.externalLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link href={`/scholarships/${data.id}`} 
+              onClick={() => setIsClicked(true)}
               className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full font-semibold text-sm transition-all duration-300 ${
                 isExpired 
                   ? 'bg-slate-200 text-slate-500 cursor-not-allowed' 
+                  : isClicked 
+                  ? 'bg-brand-600 text-white opacity-50 cursor-not-allowed' 
                   : 'bg-brand-600 text-white hover:bg-brand-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
-              }`}
-              onClick={(e) => isExpired && e.preventDefault()}
-            >
-              {isExpired ? 'Applications Closed' : 'Learn More & Apply'} 
-              {!isExpired && <ExternalLink size={16} />}
-            </a>
+              }`}>
+                {isClicked ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading...
+                  </>
+                ) : isExpired 
+                ? 'Applications Closed' 
+                : 'Learn More'}
+            </Link>
           )}
         </div>
       </div>
