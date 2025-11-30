@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Mail, GraduationCap } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -21,10 +22,10 @@ export const Footer: React.FC = () => {
           <div>
             <h3 className="text-white font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="#/" className="hover:text-brand-500 transition-colors">Home</a></li>
-              <li><a href="#/scholarships" className="hover:text-brand-500 transition-colors">Find Scholarships</a></li>
-              <li><a href="#/about" className="hover:text-brand-500 transition-colors">About Us</a></li>
-              <li><a href="#/admin" className="hover:text-brand-500 transition-colors">Admin Login</a></li>
+              <li><Link href="/" className="hover:text-brand-500 transition-colors">Home</Link></li>
+              <li><Link href="/scholarships" className="hover:text-brand-500 transition-colors">Find Scholarships</Link></li>
+              <li><Link href="/about" className="hover:text-brand-500 transition-colors">About Us</Link></li>
+              <li><Link href="/admin" className="hover:text-brand-500 transition-colors">Admin Login</Link></li>
             </ul>
           </div>
 
@@ -36,10 +37,15 @@ export const Footer: React.FC = () => {
                 info@fundedfuturesafrica.com
               </a>
             </div>
-            <p className="text-xs text-slate-500 mt-4">
-              © {new Date().getFullYear()} Funded Futures Africa. All rights reserved.
-            </p>
           </div>
+        </div>
+        <div className="mt-8 pt-8 border-t border-slate-700 text-center text-xs text-slate-500">
+          <p>
+            © {new Date().getFullYear()} Funded Futures Africa. All rights reserved.
+          </p>
+          <p className="mt-2">
+            Built by <a href="https://devruss.me" target="_blank" rel="noopener noreferrer" className="text-brand-500 hover:text-brand-400">dev🔥russ</a>
+          </p>
         </div>
       </div>
     </footer>

@@ -8,6 +8,7 @@ import {
   updateDoc, 
   deleteDoc, 
   doc,
+  getDoc,
   Firestore,
   orderBy,
   query,
@@ -134,6 +135,25 @@ export const getScholarships = async (): Promise<Scholarship[]> => {
   }
 };
 
+export const getScholarshipById = async (id: string): Promise<Scholarship | null> => {
+  if (isFirebaseInitialized && db) {
+    try {
+      const docRef = doc(db, COLLECTION_NAME, id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return mapFirebaseDocToScholarship(docSnap);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching document:", error);
+      return getLocalScholarshipById(id); // Fallback to local
+    }
+  } else {
+    return getLocalScholarshipById(id);
+  }
+};
+
 export const createScholarship = async (data: ScholarshipFormData): Promise<void> => {
   if (isFirebaseInitialized && db) {
     try {
@@ -199,6 +219,11 @@ const safelyGetLocalStorage = (): Scholarship[] => {
 
 const getLocalScholarships = (): Scholarship[] => {
   return safelyGetLocalStorage();
+};
+
+const getLocalScholarshipById = (id: string): Scholarship | null => {
+  const scholarships = safelyGetLocalStorage();
+  return scholarships.find(s => s.id === id) || null;
 };
 
 const createLocalScholarship = async (data: ScholarshipFormData): Promise<void> => {
