@@ -10,6 +10,7 @@
     "lint": "next lint ."
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^5.15.1",
     "@tailwindcss/postcss": "^4.1.17",
     "@vercel/analytics": "^1.5.0",
     "firebase": "^12.6.0",

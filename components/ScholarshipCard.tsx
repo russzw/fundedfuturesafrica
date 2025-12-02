@@ -37,15 +37,15 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
   const { isExpired, label } = getDeadlineStatus(data.deadline);
 
   return (
-    <div className={`bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full ${isExpired && !adminMode ? 'opacity-80 grayscale' : 'border-slate-200'}`}>
-      <div className="h-48 overflow-hidden bg-slate-200 relative group">
+    <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full ${isExpired && !adminMode ? 'opacity-80 grayscale' : 'border-slate-200'}`}>
+      <div className="h-48 overflow-hidden bg-slate-200 dark:bg-slate-700 relative group">
         <img 
           src={data.imageUrl || `https://picsum.photos/seed/${data.id}/800/400`} 
           alt={data.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-brand-800 shadow-sm">
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-brand-800 dark:bg-slate-900/80 dark:text-brand-400 shadow-sm">
           {data.provider}
         </div>
         {isExpired && !adminMode && (
@@ -58,43 +58,43 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
       </div>
       
       <div className="p-5 flex-1 flex flex-col">
-        <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 leading-snug">{data.title}</h3>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3 line-clamp-2 leading-snug">{data.title}</h3>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-3 mb-5 text-sm text-slate-700">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-3 mb-5 text-sm text-slate-700 dark:text-slate-300">
           <div className="flex items-center gap-2">
-            <GraduationCap size={16} className="text-brand-600 flex-shrink-0" />
+            <GraduationCap size={16} className="text-brand-600 dark:text-brand-500 flex-shrink-0" />
             <span className="truncate font-medium">{Array.isArray(data.degree) ? data.degree.join(', ') : data.degree}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Banknote size={16} className="text-brand-600 flex-shrink-0" />
+            <Banknote size={16} className="text-brand-600 dark:text-brand-500 flex-shrink-0" />
             <span className="truncate font-medium">{data.fundingAmount}</span>
           </div>
-          <div className={`flex items-center gap-2 ${isExpired ? 'text-red-600 font-semibold' : ''}`}>
-            <Calendar size={16} className={isExpired ? 'text-red-600 flex-shrink-0' : 'text-brand-600 flex-shrink-0'} />
+          <div className={`flex items-center gap-2 ${isExpired ? 'text-red-500 dark:text-red-400 font-semibold' : ''}`}>
+            <Calendar size={16} className={isExpired ? 'text-red-500 dark:text-red-400 flex-shrink-0' : 'text-brand-600 dark:text-brand-500 flex-shrink-0'} />
             <span className="truncate">{label}</span>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin size={16} className="text-brand-600 flex-shrink-0" />
+            <MapPin size={16} className="text-brand-600 dark:text-brand-500 flex-shrink-0" />
             <span className="truncate">{data.location}</span>
           </div>
         </div>
 
-        <p className="text-slate-600 text-[15px] mb-6 line-clamp-3 flex-1 leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-400 text-[15px] mb-6 line-clamp-3 flex-1 leading-relaxed">
           {data.description}
         </p>
 
-        <div className="mt-auto pt-4 border-t border-slate-100">
+        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
           {adminMode ? (
             <div className="flex gap-3">
               <button 
                 onClick={onEdit}
-                className="flex-1 py-2 px-4 bg-slate-100 border border-slate-300 text-slate-800 rounded-lg hover:bg-slate-200 font-medium text-sm transition-colors"
+                className="flex-1 py-2 px-4 bg-slate-100 border border-slate-300 text-slate-800 rounded-lg hover:bg-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-600 font-medium text-sm transition-colors"
               >
                 Edit
               </button>
               <button 
                 onClick={onDelete}
-                className="flex-1 py-2 px-4 bg-red-50 border border-red-200 text-red-600 rounded-lg hover:bg-red-100 font-medium text-sm transition-colors"
+                className="flex-1 py-2 px-4 bg-red-50 border border-red-200 text-red-600 rounded-lg hover:bg-red-100 dark:bg-red-900/20 dark:border-red-800/50 dark:text-red-400 dark:hover:bg-red-900/40 font-medium text-sm transition-colors"
               >
                 Delete
               </button>
@@ -104,7 +104,7 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
               onClick={() => setIsClicked(true)}
               className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full font-semibold text-sm transition-all duration-300 ${
                 isExpired 
-                  ? 'bg-slate-200 text-slate-500 cursor-not-allowed' 
+                  ? 'bg-slate-200 text-slate-500 cursor-not-allowed dark:bg-slate-700 dark:text-slate-400' 
                   : isClicked 
                   ? 'bg-brand-600 text-white opacity-50 cursor-not-allowed' 
                   : 'bg-brand-600 text-white hover:bg-brand-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5'

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Menu, X, GraduationCap } from 'lucide-react';
 import { NavItem } from '../types';
+import { ThemeToggle } from './ThemeToggle';
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home', path: '/' },
@@ -51,7 +52,7 @@ export const Navbar: React.FC = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out transform${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }${
-        lastScrollY > 0 ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200/50' : 'bg-white/95 backdrop-blur-sm border-b border-slate-200'
+        lastScrollY > 0 ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200/50 dark:bg-slate-900/80 dark:border-slate-700/50' : 'bg-white/95 backdrop-blur-sm border-b border-slate-200 dark:bg-slate-900/95 dark:border-slate-800'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,7 +62,7 @@ export const Navbar: React.FC = () => {
               <div className="bg-brand-600 text-white p-1.5 rounded-lg group-hover:bg-brand-700 transition-colors">
                 <GraduationCap size={24} />
               </div>
-              <span className="font-bold text-xl tracking-tight text-slate-900">
+              <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">
                 Funded Futures<span className="text-brand-600"> Africa</span>
               </span>
             </Link>
@@ -77,7 +78,7 @@ export const Navbar: React.FC = () => {
                         className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${
                             isActive 
                             ? 'text-brand-600' 
-                            : 'text-slate-600 hover:text-brand-600'
+                            : 'text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500'
                         }`}
                     >
                         {item.label}
@@ -91,12 +92,14 @@ export const Navbar: React.FC = () => {
             >
               Contact Us
             </a>
+            <ThemeToggle />
           </div>
 
           <div className="flex items-center md:hidden">
+            <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-brand-600 hover:bg-slate-100/50 focus:outline-none transition-colors"
+              className="ml-2 inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-brand-600 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 focus:outline-none transition-colors"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -106,7 +109,7 @@ export const Navbar: React.FC = () => {
       </div>
 
       <div 
-        className={`md:hidden absolute w-full bg-white/95 backdrop-blur-xl border-b border-slate-200 transition-all duration-300 ease-in-out origin-top ${
+        className={`md:hidden absolute w-full bg-white/95 backdrop-blur-xl border-b border-slate-200 dark:bg-slate-900/95 dark:border-slate-800 transition-all duration-300 ease-in-out origin-top ${
           isOpen ? 'opacity-100 scale-y-100 max-h-screen' : 'opacity-0 scale-y-0 max-h-0'
         }`}
       >
@@ -119,8 +122,8 @@ export const Navbar: React.FC = () => {
                     href={item.path}
                     className={`block px-4 py-3 rounded-lg text-base font-medium transition-all ${
                         isActive
-                        ? 'text-brand-700 bg-brand-50/80'
-                        : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50/50'
+                        ? 'text-brand-700 bg-brand-50/80 dark:text-brand-500 dark:bg-brand-900/20'
+                        : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50/50 dark:text-slate-300 dark:hover:text-brand-500 dark:hover:bg-slate-800/50'
                     }`}
                 >
                     {item.label}
