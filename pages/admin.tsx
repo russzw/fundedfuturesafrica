@@ -259,30 +259,30 @@ const AdminPage: React.FC = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader2 className="animate-spin text-brand-600" size={32} />
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <Loader2 className="animate-spin text-brand-600 dark:text-brand-500" size={32} />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 px-4">
-        <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-slate-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">
+        <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg w-full max-w-md border dark:border-slate-700 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex justify-center mb-6">
-            <div className="bg-brand-100 p-3 rounded-full">
-              <Lock className="text-brand-600" size={32} />
+            <div className="bg-brand-100 dark:bg-brand-900/50 p-3 rounded-full">
+              <Lock className="text-brand-600 dark:text-brand-400" size={32} />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-center text-slate-900 mb-2">Admin Portal</h2>
-          <p className="text-slate-500 text-center mb-8">
+          <h2 className="text-2xl font-bold text-center text-slate-900 dark:text-slate-100 mb-2">Admin Portal</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center mb-8">
             {isFirebaseInitialized 
               ? "Sign in with your authorized email." 
               : "Demo Mode: Use any email and 'admin123'"}
           </p>
           
           {isInactive && (
-            <div className="bg-yellow-50 text-yellow-700 text-sm p-3 rounded-lg flex items-start gap-2 mb-4 animate-pulse">
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300 text-sm p-3 rounded-lg flex items-start gap-2 mb-4 animate-pulse">
                 <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
                 <span>You have been logged out due to inactivity.</span>
             </div>
@@ -290,9 +290,9 @@ const AdminPage: React.FC = () => {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Email</label>
+              <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
                 <input
                   type="email"
                   required
@@ -301,16 +301,16 @@ const AdminPage: React.FC = () => {
                     setEmail(e.target.value);
                     setLoginError('');
                   }}
-                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all text-slate-900 dark:text-white"
                   placeholder="admin@fundedfuturesafrica.com"
                 />
               </div>
             </div>
             
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Password</label>
+              <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Password</label>
               <div className="relative">
-                <Key className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <Key className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
                 <input
                   type="password"
                   required
@@ -319,14 +319,14 @@ const AdminPage: React.FC = () => {
                     setPassword(e.target.value);
                     setLoginError('');
                   }}
-                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all text-slate-900 dark:text-white"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
             {loginError && (
-              <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg flex items-start gap-2 animate-pulse">
+              <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm p-3 rounded-lg flex items-start gap-2 animate-pulse">
                 <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
                 <span>{loginError}</span>
               </div>
@@ -335,7 +335,7 @@ const AdminPage: React.FC = () => {
             <button
               type="submit"
               disabled={isLoggingIn}
-              className="w-full bg-brand-600 text-white font-semibold py-3 rounded-lg hover:bg-brand-700 transition-all active:scale-[0.99] shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+              className="w-full bg-brand-600 text-white font-semibold py-3 rounded-lg hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 transition-all active:scale-[0.99] shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
             >
               {isLoggingIn ? <Loader2 className="animate-spin" size={20} /> : 'Sign In'}
             </button>
@@ -343,7 +343,7 @@ const AdminPage: React.FC = () => {
           
           {!isFirebaseInitialized && (
              <div className="mt-6 text-center">
-               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">
+               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200 dark:bg-orange-900/50 dark:text-orange-300 dark:border-orange-800">
                   <HardDrive size={12} />
                   Running in Demo Mode
                </span>
@@ -356,30 +356,30 @@ const AdminPage: React.FC = () => {
 
   // Dashboard View
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pt-24 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-3xl font-bold text-slate-900">Scholarship Manager</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Scholarship Manager</h1>
               {isFirebaseInitialized ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 dark:bg-green-900/50 dark:text-green-300 dark:border-green-800">
                   <Database size={12} />
                   Live Database
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200" title="Add Firebase keys to .env to connect">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200 dark:bg-orange-900/50 dark:text-orange-300 dark:border-orange-800" title="Add Firebase keys to .env to connect">
                   <HardDrive size={12} />
                   Local Demo Mode
                 </span>
               )}
             </div>
-            <p className="text-slate-500">Welcome, {user.email}. Manage your global scholarship listings.</p>
+            <p className="text-slate-500 dark:text-slate-400">Welcome, {user.email}. Manage your global scholarship listings.</p>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
              <button
               onClick={handleLogout}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 border border-slate-300 bg-white text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 border border-slate-300 bg-white text-slate-700 rounded-lg hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 dark:border-slate-600 font-medium transition-colors"
             >
               <LogOut size={18} />
               Logout
@@ -390,7 +390,7 @@ const AdminPage: React.FC = () => {
                 setFormData(INITIAL_FORM);
                 setIsFormOpen(true);
               }}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium transition-colors shadow-sm"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 font-medium transition-colors shadow-sm"
             >
               <Plus size={18} />
               Add New
@@ -400,7 +400,7 @@ const AdminPage: React.FC = () => {
 
         {dataLoading && !isFormOpen && !deleteId ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="animate-spin text-brand-600" size={48} />
+            <Loader2 className="animate-spin text-brand-600 dark:text-brand-500" size={48} />
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -427,12 +427,12 @@ const AdminPage: React.FC = () => {
 
         {isFormOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
-                <h2 className="text-xl font-bold text-slate-900">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center sticky top-0 bg-white dark:bg-slate-800 z-10">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
                   {editingId ? 'Edit Scholarship' : 'Add New Scholarship'}
                 </h2>
-                <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors">
                   <X size={24} />
                 </button>
               </div>
@@ -440,33 +440,33 @@ const AdminPage: React.FC = () => {
               <form onSubmit={handleSubmit} className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Scholarship Title</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Scholarship Title</label>
                     <input
                       required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.title}
                       onChange={e => setFormData({...formData, title: e.target.value})}
                       placeholder="e.g. Pan-African Excellence"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Provider</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Provider</label>
                     <input
                       required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.provider}
                       onChange={e => setFormData({...formData, provider: e.target.value})}
                       placeholder="e.g. African Union"
                     />
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Degree Types</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Degree Types</label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-2">
                       {DEGREE_OPTIONS.map(degree => (
-                        <label key={degree} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                        <label key={degree} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                            <input
                             type="checkbox"
-                            className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                            className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-brand-600 focus:ring-brand-500 dark:text-brand-500 dark:focus:ring-brand-600 dark:bg-slate-700"
                             checked={formData.degree.includes(degree)}
                             onChange={() => handleDegreeChange(degree)}
                           />
@@ -476,39 +476,39 @@ const AdminPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Deadline</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Deadline</label>
                     <input
                       type="date"
                       required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.deadline}
                       onChange={e => setFormData({...formData, deadline: e.target.value})}
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Funding Amount</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Funding Amount</label>
                     <input
                       required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.fundingAmount}
                       onChange={e => setFormData({...formData, fundingAmount: e.target.value})}
                       placeholder="e.g. Full Tuition + $1000 Stipend"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Location</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Location</label>
                     <input
                       required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.location}
                       onChange={e => setFormData({...formData, location: e.target.value})}
                       placeholder="e.g. Nairobi, Kenya"
                     />
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Image URL (Optional)</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Image URL (Optional)</label>
                     <input
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.imageUrl}
                       onChange={e => setFormData({...formData, imageUrl: e.target.value})}
                       placeholder="https://images.unsplash.com/..."
@@ -518,11 +518,11 @@ const AdminPage: React.FC = () => {
                     )}
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">External Application Link</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">External Application Link</label>
                     <input
                       type="url"
                       required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.externalLink}
                       onChange={e => setFormData({...formData, externalLink: e.target.value})}
                       placeholder="https://..."
@@ -532,11 +532,11 @@ const AdminPage: React.FC = () => {
                     )}
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Description</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Description</label>
                     <textarea
                       required
                       rows={4}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none resize-none transition-shadow"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 outline-none resize-none transition-shadow text-slate-900 dark:text-white"
                       value={formData.description}
                       onChange={e => setFormData({...formData, description: e.target.value})}
                       placeholder="Brief summary of the scholarship..."
@@ -544,17 +544,17 @@ const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4 border-t border-slate-100">
+                <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-700">
                   <button
                     type="button"
                     onClick={() => setIsFormOpen(false)}
-                    className="flex-1 py-3 px-4 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
+                    className="flex-1 py-3 px-4 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 dark:bg-slate-600 dark:text-slate-200 dark:hover:bg-slate-500 dark:border-slate-500 font-medium transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-3 px-4 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium flex justify-center items-center gap-2 transition-colors"
+                    className="flex-1 py-3 px-4 bg-brand-600 text-white rounded-lg hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 font-medium flex justify-center items-center gap-2 transition-colors"
                     disabled={dataLoading}
                   >
                     {dataLoading && <Loader2 className="animate-spin" size={18} />}
