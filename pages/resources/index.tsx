@@ -36,10 +36,10 @@ const ResourcesPage: React.FC = () => {
             <div className="lg:col-span-2 space-y-12">
 
                 <ResourceCard icon={<Search size={24}/>} title="Finding the Right Scholarship">
-                    <p>The perfect scholarship is out there for you. The key is to be strategic in your search. Don't just look for funding; look for a program that aligns with your academic and career goals.</p>
+                    <p>The perfect scholarship is out there for you. The key is to be strategic in your search. Don&apos;t just look for funding; look for a program that aligns with your academic and career goals.</p>
                     <ul className="list-disc list-inside space-y-2 pl-2">
                         <li><b>Define Your Profile:</b> What are your academic strengths, research interests, and career aspirations? This will help you target relevant scholarships.</li>
-                        <li><b>Use Smart Keywords:</b> Go beyond generic terms. Search for your specific field of study, target country, and unique personal attributes (e.g., 'women in STEM scholarship UK').</li>
+                        <li><b>Use Smart Keywords:</b> Go beyond generic terms. Search for your specific field of study, target country, and unique personal attributes (e.g., &apos;women in STEM scholarship UK&apos;).</li>
                         <li><b>Check Eligibility Carefully:</b> Read the requirements thoroughly before you start an application. Pay close attention to deadlines, nationality, and academic prerequisites.</li>
                         <li><b>Look Beyond the Obvious:</b> Explore university-specific scholarships, government-funded programs, and corporate-sponsored awards.</li>
                     </ul>
@@ -49,16 +49,16 @@ const ResourcesPage: React.FC = () => {
                     <p>Your application is your first impression. It needs to be compelling, polished, and authentic. Tell your story in a way that makes the selection committee believe in your potential.</p>
                     <ul className="list-disc list-inside space-y-2 pl-2">
                         <li><b>The Personal Statement is Key:</b> This is your chance to shine. Structure it with a clear beginning (your motivation), middle (your experience and skills), and end (your future goals and how this scholarship helps).</li>
-                        <li><b>Tailor Every Application:</b> Avoid a one-size-fits-all approach. Customize your essays and CV to match the specific scholarship's mission and values.</li>
-                        <li><b>Quantify Your Achievements:</b> Instead of saying "improved a process," say "improved process efficiency by 30% by implementing a new system."</li>
+                        <li><b>Tailor Every Application:</b> Avoid a &quot;one-size-fits-all&quot; approach. Customize your essays and CV to match the specific scholarship&apos;s mission and values.</li>
+                        <li><b>Quantify Your Achievements:</b> Instead of saying &quot;improved a process,&quot; say &quot;improved process efficiency by 30% by implementing a new system.&quot;</li>
                         <li><b>Proofread, Proofread, Proofread:</b> Typos and grammatical errors show a lack of attention to detail. Use tools like Grammarly and ask friends or mentors to review your documents.</li>
                     </ul>
                 </ResourceCard>
 
                 <ResourceCard icon={<MessageCircle size={24}/>} title="Preparing for the Interview">
-                    <p>An interview invitation means you're a top candidate. This is your opportunity to bring your application to life and connect with the committee on a personal level.</p>
+                    <p>An interview invitation means you&apos;re a top candidate. This is your opportunity to bring your application to life and connect with the committee on a personal level.</p>
                     <ul className="list-disc list-inside space-y-2 pl-2">
-                        <li><b>Research and Rehearse:</b> Understand the scholarship provider's mission. Prepare answers for common questions like "Tell me about yourself," "Why do you deserve this scholarship?" and "What are your long-term goals?"</li>
+                        <li><b>Research and Rehearse:</b> Understand the scholarship provider&apos;s mission. Prepare answers for common questions like &quot;Tell me about yourself,&quot; &quot;Why do you deserve this scholarship?&quot; and &quot;What are your long-term goals?&quot;</li>
                         <li><b>Practice the STAR Method:</b> When answering behavioral questions, describe the <b>S</b>ituation, <b>T</b>ask, <b>A</b>ction, and <b>R</b>esult. This provides a clear and impactful story.</li>
                         <li><b>Prepare Your Own Questions:</b> Asking thoughtful questions shows genuine interest. Ask about the program, alumni network, or specific research opportunities.</li>
                         <li><b>Send a Thank-You Note:</b> A brief, polite thank-you email within 24 hours of your interview can leave a lasting positive impression.</li>

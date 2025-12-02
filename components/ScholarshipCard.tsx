@@ -2,6 +2,7 @@ import React from 'react';
 import { MapPin, Calendar, Banknote, GraduationCap, AlertCircle } from 'lucide-react';
 import { Scholarship } from '../types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Props {
   data: Scholarship;
@@ -37,11 +38,13 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
   const { isExpired, label } = getDeadlineStatus(data.deadline);
 
   return (
-    <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full ${isExpired && !adminMode ? 'opacity-80 grayscale' : 'border-slate-200'}`}>
-      <div className="h-48 overflow-hidden bg-slate-200 dark:bg-slate-700 relative group">
-        <img 
+    <div className={`bg-white dark:bg-slate-900 rounded-xl shadow-sm border dark:border-slate-800 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full ${isExpired && !adminMode ? 'opacity-80 grayscale' : 'border-slate-200'}`}>
+      <div className="h-48 overflow-hidden bg-slate-200 dark:bg-slate-800 relative group">
+        <Image 
           src={data.imageUrl || `https://picsum.photos/seed/${data.id}/800/400`} 
           alt={data.title}
+          width={800}
+          height={400}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
@@ -60,22 +63,22 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
       <div className="p-5 flex-1 flex flex-col">
         <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3 line-clamp-2 leading-snug">{data.title}</h3>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-3 mb-5 text-sm text-slate-700 dark:text-slate-300">
-          <div className="flex items-center gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5 text-sm">
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-md">
             <GraduationCap size={16} className="text-brand-600 dark:text-brand-500 flex-shrink-0" />
-            <span className="truncate font-medium">{Array.isArray(data.degree) ? data.degree.join(', ') : data.degree}</span>
+            <span className="truncate font-medium text-slate-700 dark:text-slate-300">{Array.isArray(data.degree) ? data.degree.join(', ') : data.degree}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-md">
             <Banknote size={16} className="text-brand-600 dark:text-brand-500 flex-shrink-0" />
-            <span className="truncate font-medium">{data.fundingAmount}</span>
+            <span className="truncate font-medium text-slate-700 dark:text-slate-300">{data.fundingAmount}</span>
           </div>
-          <div className={`flex items-center gap-2 ${isExpired ? 'text-red-500 dark:text-red-400 font-semibold' : ''}`}>
+          <div className={`flex items-center gap-2 p-2 rounded-md ${isExpired ? 'text-red-500 dark:text-red-400 font-semibold bg-red-50 dark:bg-red-900/20' : 'bg-slate-100 dark:bg-slate-800'}`}>
             <Calendar size={16} className={isExpired ? 'text-red-500 dark:text-red-400 flex-shrink-0' : 'text-brand-600 dark:text-brand-500 flex-shrink-0'} />
-            <span className="truncate">{label}</span>
+            <span className="truncate text-slate-700 dark:text-slate-300">{label}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-md">
             <MapPin size={16} className="text-brand-600 dark:text-brand-500 flex-shrink-0" />
-            <span className="truncate">{data.location}</span>
+            <span className="truncate text-slate-700 dark:text-slate-300">{data.location}</span>
           </div>
         </div>
 
@@ -83,7 +86,7 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
           {data.description}
         </p>
 
-        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
           {adminMode ? (
             <div className="flex gap-3">
               <button 
@@ -104,10 +107,10 @@ export const ScholarshipCard: React.FC<Props> = ({ data, adminMode, onEdit, onDe
               onClick={() => setIsClicked(true)}
               className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full font-semibold text-sm transition-all duration-300 ${
                 isExpired 
-                  ? 'bg-slate-200 text-slate-500 cursor-not-allowed dark:bg-slate-700 dark:text-slate-400' 
+                  ? 'bg-slate-200 text-slate-500 cursor-not-allowed dark:bg-slate-800 dark:text-slate-400' 
                   : isClicked 
-                  ? 'bg-brand-600 text-white opacity-50 cursor-not-allowed' 
-                  : 'bg-brand-600 text-white hover:bg-brand-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                  ? 'bg-brand-600 text-white opacity-50 cursor-not-allowed dark:bg-brand-500' 
+                  : 'bg-brand-600 text-white hover:bg-brand-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 dark:bg-brand-500 dark:hover:bg-brand-600'
               }`}>
                 {isClicked ? (
                   <>

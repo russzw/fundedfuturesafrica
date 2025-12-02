@@ -95,11 +95,11 @@ const ScholarshipsPage = () => {
     <div className="space-y-6">
         {/* Sort Controls */}
         <div>
-            <label className="text-sm font-semibold text-slate-700 block mb-2">Sort by</label>
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 block mb-2">Sort by</label>
             <select 
               value={sortOrder} 
               onChange={e => setSortOrder(e.target.value)} 
-              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow bg-white"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-1 focus:ring-brand-500 outline-none transition-shadow bg-white dark:bg-slate-800"
             >
                 <option value="deadline_asc">Deadline (Soonest)</option>
                 <option value="deadline_desc">Deadline (Latest)</option>
@@ -110,7 +110,7 @@ const ScholarshipsPage = () => {
 
         {/* Degree Filter */}
         <div>
-            <label className="text-sm font-semibold text-slate-700 block mb-2">Degree Type</label>
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 block mb-2">Degree Type</label>
             <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
                 {DEGREE_OPTIONS.map(degree => (
                     <label key={degree} className="flex items-center space-x-2 cursor-pointer">
@@ -118,18 +118,18 @@ const ScholarshipsPage = () => {
                           type="checkbox" 
                           checked={degreeFilter.includes(degree)} 
                           onChange={() => handleDegreeFilterChange(degree)} 
-                          className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                          className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-brand-600 focus:ring-brand-500 bg-transparent"
                         />
-                        <span className="text-slate-600">{degree}</span>
+                        <span className="text-slate-600 dark:text-slate-400">{degree}</span>
                     </label>
                 ))}
             </div>
         </div>
         
-        <div className="pt-4 border-t border-slate-200">
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
              <button 
               onClick={clearFilters} 
-              className="w-full text-center px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+              className="w-full text-center px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md transition-colors"
             >
               Clear All Filters
             </button>
@@ -138,14 +138,14 @@ const ScholarshipsPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-black pt-24 pb-12">
         {/* Header */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-                <h1 className="text-4xl font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
+                <h1 className="text-4xl font-extrabold text-slate-900 dark:text-slate-100 sm:text-5xl md:text-6xl">
                     Find Your Scholarship
                 </h1>
-                <p className="mt-4 max-w-2xl mx-auto text-xl text-slate-500">
+                <p className="mt-4 max-w-2xl mx-auto text-xl text-slate-500 dark:text-slate-400">
                     Explore opportunities across Africa and beyond. Your future awaits.
                 </p>
                   <div className="mt-2 text-center">
@@ -164,7 +164,7 @@ const ScholarshipsPage = () => {
             </div>
 
             {/* Search Bar */}
-             <div className="mb-8 sticky top-20 z-20 bg-slate-50/80 backdrop-blur-md -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4 border-b border-slate-200">
+             <div className="mb-8 sticky top-20 z-20 bg-slate-50/80 dark:bg-black/80 backdrop-blur-md -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4 border-b border-slate-200 dark:border-slate-800">
                 <div className="max-w-7xl mx-auto flex gap-4">
                     <div className="relative flex-grow">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
@@ -173,12 +173,12 @@ const ScholarshipsPage = () => {
                             placeholder="Search by title, provider, or keyword..." 
                             value={searchTerm} 
                             onChange={e => setSearchTerm(e.target.value)} 
-                            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all shadow-sm"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all shadow-sm bg-white dark:bg-slate-900"
                         />
                     </div>
                     <button 
                       onClick={() => setIsFilterMenuOpen(true)} 
-                      className="flex-shrink-0 flex items-center gap-2 px-4 py-3 bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors shadow-sm md:hidden"
+                      className="flex-shrink-0 flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors shadow-sm md:hidden"
                     >
                         <Filter size={18}/>
                         <span>Filters</span>
@@ -194,7 +194,7 @@ const ScholarshipsPage = () => {
         {/* Desktop Filters */}
         <aside className="hidden md:block w-full md:w-64 lg:w-72 flex-shrink-0">
             <div className="sticky top-44">
-               <h3 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Filters</h3>
+               <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b pb-2 border-slate-200 dark:border-slate-700">Filters</h3>
                <FilterContent />
             </div>
         </aside>
@@ -212,9 +212,9 @@ const ScholarshipsPage = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 border-2 border-dashed border-slate-200 rounded-lg">
-                <h3 className="text-xl font-semibold text-slate-700">No Matching Scholarships</h3>
-                <p className="text-slate-500 mt-2">Try adjusting your search or filter criteria.</p>
+            <div className="text-center py-20 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg">
+                <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300">No Matching Scholarships</h3>
+                <p className="text-slate-500 dark:text-slate-400 mt-2">Try adjusting your search or filter criteria.</p>
             </div>
           )}
         </main>
@@ -223,9 +223,9 @@ const ScholarshipsPage = () => {
       {/* Mobile Filter Modal */}
       {isFilterMenuOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200 md:hidden">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto flex flex-col">
-              <div className="p-4 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
-                <h2 className="text-lg font-bold text-slate-900">Filters</h2>
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto flex flex-col">
+              <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Filters</h2>
                 <button onClick={() => setIsFilterMenuOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
                   <X size={24} />
                 </button>
@@ -233,7 +233,7 @@ const ScholarshipsPage = () => {
               <div className="p-6 flex-grow">
                 <FilterContent />
               </div>
-                <div className="p-4 border-t bg-slate-50 sticky bottom-0">
+                <div className="p-4 border-t bg-slate-50 dark:bg-slate-800/50 sticky bottom-0">
                     <button onClick={() => setIsFilterMenuOpen(false)} className="w-full bg-brand-600 text-white font-semibold py-2.5 rounded-lg hover:bg-brand-700 transition-all">
                         Apply Filters
                     </button>

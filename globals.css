@@ -7,6 +7,6 @@
     @apply bg-white text-slate-800;
   }
   .dark body {
-    @apply bg-slate-900 text-slate-200;
+    @apply bg-black text-slate-200;
   }
 }

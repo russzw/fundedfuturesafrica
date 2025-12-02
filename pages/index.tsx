@@ -6,6 +6,7 @@ import { ScholarshipCard } from '../components/ScholarshipCard';
 import { getScholarships } from '../services/firebase';
 import { Scholarship } from '../types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const HomePage: React.FC = () => {
   const [scholarships, setScholarships] = useState<Scholarship[]>([]);
@@ -38,7 +39,7 @@ const HomePage: React.FC = () => {
   const featuredScholarships = filteredData.slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-black">
 
       {/* Hero Section */}
       <section className="bg-sky-900 text-white relative overflow-hidden">
@@ -59,14 +60,14 @@ const HomePage: React.FC = () => {
             </Link>
           </div>
         </div>
-        <div className="absolute -bottom-1/3 left-0 right-0 h-1/2 bg-gradient-to-t from-slate-50 z-10"></div>
+        <div className="absolute -bottom-1/3 left-0 right-0 h-1/2 bg-gradient-to-t from-slate-50 dark:from-black z-10"></div>
       </section>
 
       {/* Featured Scholarships Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Featured Opportunities</h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">Handpicked scholarships that are currently popular and highly sought-after.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">Featured Opportunities</h2>
+            <p className="mt-4 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Handpicked scholarships that are currently popular and highly sought-after.</p>
         </div>
         
         {loading ? (
@@ -80,63 +81,63 @@ const HomePage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white rounded-xl border border-dashed border-slate-300">
-            <p className="text-slate-500 text-lg">No featured scholarships available at the moment.</p>
+          <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+            <p className="text-slate-500 dark:text-slate-400 text-lg">No featured scholarships available at the moment.</p>
           </div>
         )}
 
         <div className="text-center mt-12">
-            <Link href="/scholarships" className="text-brand-600 font-semibold hover:underline flex items-center justify-center gap-2">
+            <Link href="/scholarships" className="text-brand-600 dark:text-brand-500 font-semibold hover:underline flex items-center justify-center gap-2">
                 View All Scholarships <ArrowRight size={16} />
             </Link>
         </div>
       </main>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="bg-white py-20 md:py-28 border-y border-slate-200">
+      <section id="how-it-works" className="bg-white dark:bg-black py-20 md:py-28 border-y border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">How It Works</h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">Four simple steps to your global education journey.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">How It Works</h2>
+            <p className="mt-4 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Four simple steps to your global education journey.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-12 max-w-5xl mx-auto relative">
              {/* Dashed line connector for desktop */}
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-slate-300 -translate-y-12"></div>
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-slate-300 dark:border-slate-700 -translate-y-12"></div>
             
             <div className="text-center relative">
-                <div className="inline-flex items-center justify-center w-24 h-24 bg-white border-2 border-slate-300 rounded-full mb-4 z-10 relative">
+                <div className="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-full mb-4 z-10 relative">
                     <span className="text-3xl font-bold text-brand-600">1</span>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">Discover</h3>
-                <p className="text-slate-500 text-sm">Browse through our extensive, up-to-date list of scholarships.</p>
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-2">Discover</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Browse through our extensive, up-to-date list of scholarships.</p>
             </div>
             <div className="text-center relative">
-                 <div className="inline-flex items-center justify-center w-24 h-24 bg-white border-2 border-slate-300 rounded-full mb-4 z-10 relative">
+                 <div className="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-full mb-4 z-10 relative">
                     <span className="text-3xl font-bold text-brand-600">2</span>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">Filter</h3>
-                <p className="text-slate-500 text-sm">Use smart filters to narrow down choices based on your profile and interests.</p>
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-2">Filter</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Use smart filters to narrow down choices based on your profile and interests.</p>
             </div>
             <div className="text-center relative">
-                <div className="inline-flex items-center justify-center w-24 h-24 bg-white border-2 border-slate-300 rounded-full mb-4 z-10 relative">
+                <div className="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-full mb-4 z-10 relative">
                     <span className="text-3xl font-bold text-brand-600">3</span>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">Prepare</h3>
-                <p className="text-slate-500 text-sm">Get all the details and links you need to prepare a winning application.</p>
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-2">Prepare</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Get all the details and links you need to prepare a winning application.</p>
             </div>
             <div className="text-center relative">
-                <div className="inline-flex items-center justify-center w-24 h-24 bg-white border-2 border-slate-300 rounded-full mb-4 z-10 relative">
+                <div className="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-full mb-4 z-10 relative">
                     <span className="text-3xl font-bold text-brand-600">4</span>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">Apply</h3>
-                <p className="text-slate-500 text-sm">Confidently apply directly on the scholarship provider's official website.</p>
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-2">Apply</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Confidently apply directly on the scholarship provider&apos;s official website.</p>
             </div>
           </div>
         </div>
       </section>
 
         {/* CTA Section */}
-        <section className="bg-white">
+        <section className="bg-white dark:bg-black">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
                 <div className="bg-gradient-to-br from-brand-600 to-sky-700 text-white rounded-2xl shadow-xl overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 items-center">
@@ -148,7 +149,7 @@ const HomePage: React.FC = () => {
                            </Link>
                         </div>
                         <div className="hidden md:block h-full">
-                            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1740&auto=format&fit=crop" alt="Graduation" className="h-full w-full object-cover"/>
+                            <Image src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1740&auto=format&fit=crop" alt="Graduation" className="h-full w-full object-cover" width={1740} height={1160} />
                         </div>
                     </div>
                 </div>

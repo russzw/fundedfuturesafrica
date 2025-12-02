@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Lock, Plus, X, Loader2, LogOut, AlertTriangle, Trash2, Database, HardDrive, Mail, Key } from 'lucide-react';
+import { Lock, Plus, X, Loader2, LogOut, AlertTriangle, Database, HardDrive, Mail, Key } from 'lucide-react';
 import { 
   getScholarships, 
   createScholarship, 
@@ -14,6 +14,7 @@ import {
 } from '../services/firebase';
 import { Scholarship, ScholarshipFormData } from '../types';
 import { ScholarshipCard } from '../components/ScholarshipCard';
+import { ConfirmationDialog } from '../components/ConfirmationDialog';
 
 const DEGREE_OPTIONS = [
   "High School",
@@ -78,6 +79,16 @@ const AdminPage: React.FC = () => {
     setIsInactive(false);
   }, []);
 
+  const loadData = useCallback(async () => {
+    setDataLoading(true);
+    try {
+      const data = await getScholarships();
+      setScholarships(data);
+    } finally {
+      setDataLoading(false);
+    }
+  }, []);
+
   // Auth Listener & Inactivity Timer
   useEffect(() => {
     let inactivityTimer: NodeJS.Timeout;
@@ -134,17 +145,7 @@ const AdminPage: React.FC = () => {
         clearTimeout(inactivityTimer);
       };
     }
-  }, [handleLogout]);
-
-  const loadData = async () => {
-    setDataLoading(true);
-    try {
-      const data = await getScholarships();
-      setScholarships(data);
-    } finally {
-      setDataLoading(false);
-    }
-  };
+  }, [handleLogout, INACTIVITY_TIMEOUT, isFirebaseInitialized, loadData]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -415,36 +416,14 @@ const AdminPage: React.FC = () => {
           </div>
         )}
 
-        {deleteId && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden scale-100 transform transition-all">
-              <div className="p-6 text-center">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Trash2 className="text-red-600" size={24} />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Delete Scholarship?</h3>
-                <p className="text-slate-500 text-sm mb-6">
-                  Are you sure you want to delete this scholarship? This action cannot be undone.
-                </p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setDeleteId(null)}
-                    className="flex-1 py-2.5 px-4 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={confirmDelete}
-                    className="flex-1 py-2.5 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors flex justify-center items-center"
-                    disabled={dataLoading}
-                  >
-                    {dataLoading ? <Loader2 className="animate-spin" size={18} /> : 'Delete'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <ConfirmationDialog
+          isOpen={!!deleteId}
+          onClose={() => setDeleteId(null)}
+          onConfirm={confirmDelete}
+          isConfirming={dataLoading}
+          title="Delete Scholarship?"
+          message="Are you sure you want to delete this scholarship? This action cannot be undone."
+        />
 
         {isFormOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-in fade-in duration-200">
