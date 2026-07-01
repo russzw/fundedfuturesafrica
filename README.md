@@ -6,67 +6,142 @@
 
 **A modern scholarship platform connecting African students with educational funding opportunities.**
 
-This platform features a public directory of scholarships and an admin dashboard for managing listings. It's built with Next.js, TypeScript, and Firebase, providing a fast, secure, and user-friendly experience for both students and administrators.
+Built with Next.js 14, TypeScript, Firebase, and Tailwind CSS. Features a public scholarship directory, admin dashboard with web scraping, and a full light/dark/darker theme system.
 
 ## Features
 
-*   **Public Scholarship Directory:** A comprehensive and searchable list of scholarships available to African students.
-*   **Admin Dashboard:** A secure area for administrators to add, edit, and remove scholarship listings.
-*   **Detailed Scholarship Information:** Each listing includes key details such as the provider, funding amount, deadline, and a link to the external application.
-*   **Responsive Design:** The platform is fully responsive and accessible on all devices.
+### Public Platform
+- **Scholarship Directory:** Searchable and filterable list of scholarships with degree level, location, and deadline filters
+- **Detailed Views:** Each listing includes provider, funding amount, deadline, description, and direct link to the external application
+- **Social Sharing:** Share scholarships via Facebook, Twitter, LinkedIn, WhatsApp, or copy link
+- **Education Imagery:** Curated education-related placeholder images for scholarships without custom images
+
+### Admin Dashboard
+- **Secure Login:** Firebase authentication with inactivity timeout (auto-logout after 10 minutes)
+- **CRUD Operations:** Add, edit, and delete scholarship listings
+- **Web Scraping:** Scrape scholarship listings from any webpage using a URL. Extracted data (title, provider, location, deadline, funding, description) is editable before posting
+- **Demo Mode:** Works without Firebase configured using localStorage
+
+### Theme System
+- **3 Modes:** Light (default), Dark (slate-based), Darker (pure black / OLED-friendly)
+- **Persistent:** Theme preference saved to localStorage
+- **OS Detection:** Respects system preference on first visit
+
+### Resources Center
+- **Application Tips:** Detailed guide covering personal statements, recommendation letters, and proofreading
+- **Interview Prep:** STAR method, common questions, virtual interview tips, follow-up guidance
+- **Application Checklist:** Comprehensive document checklist with deadlines and submission tips
+- **Key Resources:** Links to external scholarship databases (Fulbright, Chevening, DAAD, etc.)
 
 ## Getting Started
 
 ### Prerequisites
 
-*   Node.js (v18 or later recommended)
-*   npm
+- Node.js (v18 or later)
+- npm
 
-### Installation and Setup
+### Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/funded-futures-africa.git
-    cd funded-futures-africa
-    ```
+```bash
+git clone https://github.com/russzw/fundedfuturesafrica.git
+cd fundedfuturesafrica/fundedfutures
+npm install
+```
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+### Environment Variables
 
-3.  **Set up environment variables:**
-    Create a `.env.local` file in the root of your project and add your Firebase configuration details:
+Create a `.env.local` file in the project root:
 
-    ```
-    NEXT_PUBLIC_FIREBASE_API_KEY="your-api-key"
-    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-auth-domain"
-    NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
-    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your-storage-bucket"
-    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your-messaging-sender-id"
-    NEXT_PUBLIC_FIREBASE_APP_ID="your-app-id"
-    ```
+```
+NEXT_PUBLIC_FIREBASE_API_KEY="your-api-key"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-auth-domain"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your-storage-bucket"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your-messaging-sender-id"
+NEXT_PUBLIC_FIREBASE_APP_ID="your-app-id"
+```
 
-4.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
+> The app runs in **Demo Mode** (localStorage) if Firebase is not configured.
 
-    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-## Technologies Used
+```bash
+npm run dev
+```
 
-*   **Next.js:** A React framework for building server-side rendered and static web applications.
-*   **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
-*   **Firebase:** A platform for building web and mobile applications, used here for database and authentication.
-*   **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
+Open [http://localhost:3000](http://localhost:3000)
+
+### Production Build
+
+```bash
+npm run build
+npm start
+```
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Next.js 14 | React framework (Pages Router) |
+| TypeScript | Type-safe development |
+| Firebase | Authentication and Firestore database |
+| Tailwind CSS | Utility-first styling |
+| Cheerio | Server-side HTML parsing for web scraping |
+| Lucide React | Icon library |
+
+## Project Structure
+
+```
+fundedfutures/
+├── components/
+│   ├── Footer.tsx          # 4-column footer with brand and links
+│   ├── Navbar.tsx           # Sticky nav with blur backdrop, search, theme toggle
+│   ├── ScholarshipCard.tsx  # Scholarship listing card with badges
+│   ├── ScrapeModal.tsx      # Web scraping UI with editable results
+│   ├── ThemeToggle.tsx      # Light/Dark/Darker mode toggle
+│   └── WhatsappIcon.tsx     # WhatsApp share icon
+├── contexts/
+│   └── ThemeContext.tsx      # Theme provider with localStorage persistence
+├── pages/
+│   ├── api/scrape.ts        # Server-side scraping API
+│   ├── index.tsx            # Homepage with hero, featured, how-it-works
+│   ├── admin.tsx            # Admin dashboard with auth and CRUD
+│   ├── about/index.tsx      # About page with mission, vision, impact
+│   ├── resources/index.tsx  # Application tips, interview prep, checklist
+│   └── scholarships/
+│       ├── index.tsx        # Browse with sidebar filters
+│       └── [id].tsx         # Detail page with sharing
+├── services/
+│   └── firebase.ts          # Firebase config and Firestore CRUD
+├── utils/
+│   └── placeholderImages.ts # Education-related placeholder images
+├── globals.css              # Design system, dark mode, component classes
+├── tailwind.config.js       # Brand colors, fonts, shadows
+└── types.ts                 # TypeScript interfaces
+```
+
+## Admin Access
+
+**Demo Mode (no Firebase):**
+- Email: `admin@fundedfuturesafrica.com`
+- Password: `sudoAfrica!`
+
+**Firebase Mode:** Use your configured Firebase credentials.
 
 ## Deployment
 
-This app is designed for easy deployment on platforms like Vercel or Netlify. You can also deploy it to Firebase Hosting.
+### Vercel (Recommended)
 
-### Deploy with Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/russzw/fundedfuturesafrica)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Other Platforms
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Compatible with any Node.js hosting (Netlify, Railway, Firebase Hosting, etc.).
+
+## License
+
+This project is open source. See the repository for license details.
+
+## Author
+
+Built by [devruss](https://www.devruss.site/)
