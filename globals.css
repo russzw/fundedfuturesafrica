@@ -1,3 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans transition-colors duration-300;
+  }
+
+  /* Dark mode */
+  html.dark body {
+    @apply bg-slate-900 text-slate-100;
+  }
+
+  /* Darker mode - OLED black */
+  html.darker body {
+    @apply bg-black text-zinc-100;
+  }
+
+  html.darker {
+    color-scheme: dark;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-400 text-slate-800 font-semibold rounded-lg transition-all duration-200 hover:shadow-cta hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border border-slate-300 text-slate-700 font-semibold rounded-lg bg-transparent transition-all duration-200 hover:bg-slate-100 hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  html.dark .btn-secondary {
+    @apply border-slate-600 text-slate-300 hover:bg-slate-800;
+  }
+
+  html.darker .btn-secondary {
+    @apply border-zinc-800 text-zinc-300 hover:bg-zinc-900;
+  }
+
+  .card {
+    @apply bg-white rounded-card border border-slate-200 shadow-card transition-all duration-300 hover:shadow-card-hover hover:scale-[1.01];
+  }
+
+  html.dark .card {
+    @apply bg-slate-800 border-slate-700 shadow-card-dark hover:shadow-card-dark-hover;
+  }
+
+  html.darker .card {
+    @apply bg-zinc-950 border-zinc-800 shadow-card-dark hover:shadow-card-dark-hover;
+  }
+
+  .pill-tag {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700;
+  }
+
+  html.dark .pill-tag {
+    @apply bg-slate-700 text-slate-300;
+  }
+
+  html.darker .pill-tag {
+    @apply bg-zinc-900 text-zinc-300;
+  }
+
+  .filter-section {
+    @apply bg-white rounded-card border border-slate-200 p-5;
+  }
+
+  html.dark .filter-section {
+    @apply bg-slate-800 border-slate-700;
+  }
+
+  html.darker .filter-section {
+    @apply bg-zinc-950 border-zinc-800;
+  }
+
+  .input-base {
+    @apply w-full px-4 py-3 border border-slate-300 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-600 focus:border-transparent outline-none transition-all duration-200;
+  }
+
+  html.dark .input-base {
+    @apply border-slate-600 bg-slate-700 text-slate-100 placeholder-slate-400;
+  }
+
+  html.darker .input-base {
+    @apply border-zinc-800 bg-zinc-900 text-zinc-100 placeholder-zinc-500;
+  }
+
+  /* Theme toggle pill */
+  .theme-toggle-pill {
+    @apply inline-flex items-center bg-slate-100 rounded-full p-1 gap-0.5;
+  }
+
+  html.dark .theme-toggle-pill {
+    @apply bg-slate-800;
+  }
+
+  html.darker .theme-toggle-pill {
+    @apply bg-zinc-900;
+  }
+
+  .theme-toggle-btn {
+    @apply relative z-10 p-1.5 rounded-full transition-all duration-200 text-slate-500 hover:text-slate-700;
+  }
+
+  html.dark .theme-toggle-btn {
+    @apply text-slate-400 hover:text-slate-200;
+  }
+
+  html.darker .theme-toggle-btn {
+    @apply text-zinc-400 hover:text-zinc-200;
+  }
+
+  .theme-toggle-btn.active {
+    @apply text-amber-500;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
